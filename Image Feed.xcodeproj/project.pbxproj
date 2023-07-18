@@ -62,8 +62,8 @@
 		7D9CFA4128DDEE7F00D971A7 /* Image Feed */ = {
 			isa = PBXGroup;
 			children = (
-				964D88992A65407E007AE563 /* SingleImage */,
 				964D88982A616E99007AE563 /* Resources */,
+				964D88992A65407E007AE563 /* SingleImage */,
 				96BFFF672A6040DA0024BBE4 /* Profile */,
 				96DCC8612A54169E006649AC /* ImagesList */,
 				7D9CFA4828DDEE7F00D971A7 /* Main.storyboard */,
