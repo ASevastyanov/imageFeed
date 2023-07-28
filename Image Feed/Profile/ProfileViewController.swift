@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ProfileViewController: UIViewController {
+final class ProfileViewController: UIViewController {
     private lazy var profileImage = UIImage(named: "Photo")
     
     private lazy var profileImageView : UIImageView = {
@@ -39,6 +39,7 @@ class ProfileViewController: UIViewController {
     
     private lazy var userDescriptionLabel : UILabel = {
         let userDescriptionLabel = UILabel()
+        userDescriptionLabel.numberOfLines = 0
         userDescriptionLabel.text = "Hello, world!"
         userDescriptionLabel.textColor = .ypWhite
         userDescriptionLabel.font = UIFont.systemFont(ofSize: 13)
@@ -85,10 +86,13 @@ class ProfileViewController: UIViewController {
             profileImageView.heightAnchor.constraint(equalToConstant: 70),
             nameUserLabel.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 8),
             nameUserLabel.leadingAnchor.constraint(equalTo: profileImageView.leadingAnchor),
+            nameUserLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             loginUserLabel.topAnchor.constraint(equalTo: nameUserLabel.bottomAnchor, constant: 8),
             loginUserLabel.leadingAnchor.constraint(equalTo: profileImageView.leadingAnchor),
+            loginUserLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             userDescriptionLabel.topAnchor.constraint(equalTo: loginUserLabel.bottomAnchor, constant: 8),
             userDescriptionLabel.leadingAnchor.constraint(equalTo: profileImageView.leadingAnchor),
+            userDescriptionLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             logoutButtom.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             logoutButtom.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
         ])
