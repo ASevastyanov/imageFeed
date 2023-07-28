@@ -13,6 +13,9 @@
 		7D9CFA4C28DDEE8000D971A7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7D9CFA4B28DDEE8000D971A7 /* Assets.xcassets */; };
 		7D9CFA4F28DDEE8000D971A7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D9CFA4D28DDEE8000D971A7 /* LaunchScreen.storyboard */; };
 		7D9CFA5728DDEF8900D971A7 /* ImagesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9CFA5628DDEF8800D971A7 /* ImagesListViewController.swift */; };
+		962868EA2A72C53F00A91BB9 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962868E92A72C53F00A91BB9 /* UIColor.swift */; };
+		964D889B2A6540C6007AE563 /* SingleImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964D889A2A6540C6007AE563 /* SingleImageViewController.swift */; };
+		96BFFF662A603E750024BBE4 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96BFFF652A603E750024BBE4 /* ProfileViewController.swift */; };
 		96DCC8602A541657006649AC /* ImagesListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DCC85F2A541656006649AC /* ImagesListCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -25,6 +28,9 @@
 		7D9CFA4E28DDEE8000D971A7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7D9CFA5028DDEE8000D971A7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7D9CFA5628DDEF8800D971A7 /* ImagesListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagesListViewController.swift; sourceTree = "<group>"; };
+		962868E92A72C53F00A91BB9 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
+		964D889A2A6540C6007AE563 /* SingleImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleImageViewController.swift; sourceTree = "<group>"; };
+		96BFFF652A603E750024BBE4 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		96DCC85F2A541656006649AC /* ImagesListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -58,15 +64,50 @@
 		7D9CFA4128DDEE7F00D971A7 /* Image Feed */ = {
 			isa = PBXGroup;
 			children = (
-				7D9CFA4228DDEE7F00D971A7 /* AppDelegate.swift */,
-				7D9CFA4428DDEE7F00D971A7 /* SceneDelegate.swift */,
+				962868E82A72C50B00A91BB9 /* Helpers */,
+				964D88982A616E99007AE563 /* Resources */,
+				964D88992A65407E007AE563 /* SingleImage */,
+				96BFFF672A6040DA0024BBE4 /* Profile */,
 				96DCC8612A54169E006649AC /* ImagesList */,
 				7D9CFA4828DDEE7F00D971A7 /* Main.storyboard */,
+				7D9CFA4228DDEE7F00D971A7 /* AppDelegate.swift */,
+				7D9CFA4428DDEE7F00D971A7 /* SceneDelegate.swift */,
+			);
+			path = "Image Feed";
+			sourceTree = "<group>";
+		};
+		962868E82A72C50B00A91BB9 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				962868E92A72C53F00A91BB9 /* UIColor.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		964D88982A616E99007AE563 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
 				7D9CFA4B28DDEE8000D971A7 /* Assets.xcassets */,
 				7D9CFA4D28DDEE8000D971A7 /* LaunchScreen.storyboard */,
 				7D9CFA5028DDEE8000D971A7 /* Info.plist */,
 			);
-			path = "Image Feed";
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		964D88992A65407E007AE563 /* SingleImage */ = {
+			isa = PBXGroup;
+			children = (
+				964D889A2A6540C6007AE563 /* SingleImageViewController.swift */,
+			);
+			path = SingleImage;
+			sourceTree = "<group>";
+		};
+		96BFFF672A6040DA0024BBE4 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				96BFFF652A603E750024BBE4 /* ProfileViewController.swift */,
+			);
+			path = Profile;
 			sourceTree = "<group>";
 		};
 		96DCC8612A54169E006649AC /* ImagesList */ = {
@@ -151,7 +192,10 @@
 			files = (
 				7D9CFA4328DDEE7F00D971A7 /* AppDelegate.swift in Sources */,
 				96DCC8602A541657006649AC /* ImagesListCell.swift in Sources */,
+				96BFFF662A603E750024BBE4 /* ProfileViewController.swift in Sources */,
 				7D9CFA5728DDEF8900D971A7 /* ImagesListViewController.swift in Sources */,
+				962868EA2A72C53F00A91BB9 /* UIColor.swift in Sources */,
+				964D889B2A6540C6007AE563 /* SingleImageViewController.swift in Sources */,
 				7D9CFA4528DDEE7F00D971A7 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -301,7 +345,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8ZBXUD522V;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Image Feed/Info.plist";
+				INFOPLIST_FILE = "Image Feed/Resources/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -314,7 +358,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "ru.praktikum.Image-Feed";
+				PRODUCT_BUNDLE_IDENTIFIER = "Image-Feed";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -331,7 +375,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8ZBXUD522V;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Image Feed/Info.plist";
+				INFOPLIST_FILE = "Image Feed/Resources/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -344,7 +388,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "ru.praktikum.Image-Feed";
+				PRODUCT_BUNDLE_IDENTIFIER = "Image-Feed";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
