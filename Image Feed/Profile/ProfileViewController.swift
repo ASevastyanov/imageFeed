@@ -1,12 +1,6 @@
-//
-//  ProfileViewController.swift
-//  Image Feed
-//
-//  Created by Alexandr Seva on 13.07.2023.
-//
-
 import UIKit
 
+//MARK: - UIViewController
 final class ProfileViewController: UIViewController {
     private lazy var profileImage = UIImage(named: "Photo")
     
