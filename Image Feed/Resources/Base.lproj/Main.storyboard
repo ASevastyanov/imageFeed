@@ -106,19 +106,27 @@
                                     <action selector="didTapBackButton:" destination="sM9-pk-Jxq" eventType="touchUpInside" id="vTW-vG-Rzr"/>
                                 </connections>
                             </button>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressImage="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Hxg-W4-SWv">
+                                <rect key="frame" x="0.0" y="32" width="414" height="4"/>
+                                <color key="progressTintColor" name="YP Black"/>
+                            </progressView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="AXC-cu-bKW"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="KZt-Kn-1gF" secondAttribute="trailing" id="Byl-JU-91G"/>
+                            <constraint firstItem="Hxg-W4-SWv" firstAttribute="top" secondItem="H2V-Ct-JuX" secondAttribute="bottom" id="G98-Uz-1vd"/>
                             <constraint firstItem="KZt-Kn-1gF" firstAttribute="top" secondItem="OH8-TH-sEs" secondAttribute="top" id="Pkc-3y-PwB"/>
+                            <constraint firstItem="AXC-cu-bKW" firstAttribute="trailing" secondItem="Hxg-W4-SWv" secondAttribute="trailing" id="QfP-2b-rSi"/>
                             <constraint firstAttribute="bottom" secondItem="KZt-Kn-1gF" secondAttribute="bottom" id="XLi-Xk-NwW"/>
                             <constraint firstItem="H2V-Ct-JuX" firstAttribute="top" secondItem="AXC-cu-bKW" secondAttribute="top" constant="8" id="cYl-LZ-JJ1"/>
                             <constraint firstItem="H2V-Ct-JuX" firstAttribute="leading" secondItem="AXC-cu-bKW" secondAttribute="leading" constant="8" id="jC3-nq-ffq"/>
+                            <constraint firstItem="Hxg-W4-SWv" firstAttribute="leading" secondItem="AXC-cu-bKW" secondAttribute="leading" id="jHD-la-AdA"/>
                             <constraint firstItem="KZt-Kn-1gF" firstAttribute="leading" secondItem="OH8-TH-sEs" secondAttribute="leading" id="uGV-Bu-P9f"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="progressView" destination="Hxg-W4-SWv" id="hFn-AJ-ehD"/>
                         <outlet property="webView" destination="KZt-Kn-1gF" id="ThY-Ky-the"/>
                     </connections>
                 </viewController>
@@ -331,6 +339,7 @@
     </scenes>
     <resources>
         <image name="0" width="3840" height="2160"/>
+        <image name="0.5" width="128" height="128"/>
         <image name="Backward" width="24" height="24"/>
         <image name="Logo_of_Unsplash" width="60" height="60"/>
         <image name="Sharing" width="50" height="50"/>

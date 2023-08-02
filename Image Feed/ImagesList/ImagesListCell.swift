@@ -1,5 +1,6 @@
 import UIKit
 
+//MARK: - UITableViewCell
 final class ImagesListCell: UITableViewCell {
     @IBOutlet private weak var cellImage: UIImageView!
     @IBOutlet private weak var likeButton: UIButton!
@@ -15,6 +16,7 @@ final class ImagesListCell: UITableViewCell {
     }()
 }
 
+//MARK: - UITableViewCell
 extension ImagesListCell {
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         guard let image = UIImage(named: photosName[indexPath.row]) else {
