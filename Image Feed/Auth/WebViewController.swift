@@ -1,8 +1,6 @@
 import UIKit
 import WebKit
 
-
-
 //MARK: - UIViewController
 final class WebViewViewController: UIViewController {
     @IBOutlet private var progressView: UIProgressView!
