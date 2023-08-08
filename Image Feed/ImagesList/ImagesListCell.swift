@@ -1,12 +1,6 @@
-//
-//  ImagesListCell.swift
-//  Image Feed
-//
-//  Created by Alexandr Seva on 04.07.2023.
-//
-
 import UIKit
 
+//MARK: - UITableViewCell
 final class ImagesListCell: UITableViewCell {
     @IBOutlet private weak var cellImage: UIImageView!
     @IBOutlet private weak var likeButton: UIButton!
@@ -16,12 +10,13 @@ final class ImagesListCell: UITableViewCell {
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        formatter.timeStyle = .none
+        formatter.dateFormat = "dd MMMM yyyy"
+        formatter.locale = Locale(identifier: "ru_RU")
         return formatter
     }()
 }
 
+//MARK: - UITableViewCell
 extension ImagesListCell {
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         guard let image = UIImage(named: photosName[indexPath.row]) else {
