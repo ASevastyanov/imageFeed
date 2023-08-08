@@ -20,6 +20,7 @@
 		962868F82A781BEE00A91BB9 /* WebViewViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962868F72A781BEE00A91BB9 /* WebViewViewControllerDelegate.swift */; };
 		963CEB672A81307800B27B17 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963CEB662A81307800B27B17 /* SplashViewController.swift */; };
 		963CEB692A81331C00B27B17 /* AuthViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963CEB682A81331C00B27B17 /* AuthViewControllerDelegate.swift */; };
+		963CEB6D2A8292D200B27B17 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963CEB6C2A8292D200B27B17 /* NetworkError.swift */; };
 		964D889B2A6540C6007AE563 /* SingleImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964D889A2A6540C6007AE563 /* SingleImageViewController.swift */; };
 		96A23FA22A7C199100D94922 /* OAuth2Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A23FA12A7C199100D94922 /* OAuth2Service.swift */; };
 		96A23FA42A7C19A500D94922 /* OAuth2TokenStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A23FA32A7C19A500D94922 /* OAuth2TokenStorage.swift */; };
@@ -46,6 +47,7 @@
 		962868F72A781BEE00A91BB9 /* WebViewViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewViewControllerDelegate.swift; sourceTree = "<group>"; };
 		963CEB662A81307800B27B17 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		963CEB682A81331C00B27B17 /* AuthViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewControllerDelegate.swift; sourceTree = "<group>"; };
+		963CEB6C2A8292D200B27B17 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		964D889A2A6540C6007AE563 /* SingleImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleImageViewController.swift; sourceTree = "<group>"; };
 		96A23FA12A7C199100D94922 /* OAuth2Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2Service.swift; sourceTree = "<group>"; };
 		96A23FA32A7C19A500D94922 /* OAuth2TokenStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2TokenStorage.swift; sourceTree = "<group>"; };
@@ -118,6 +120,7 @@
 				962868F02A76BA7200A91BB9 /* AuthConfiguration.swift */,
 				962868F72A781BEE00A91BB9 /* WebViewViewControllerDelegate.swift */,
 				963CEB682A81331C00B27B17 /* AuthViewControllerDelegate.swift */,
+				963CEB6C2A8292D200B27B17 /* NetworkError.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -281,6 +284,7 @@
 				962868F42A77A91200A91BB9 /* AuthViewController.swift in Sources */,
 				96A23FA42A7C19A500D94922 /* OAuth2TokenStorage.swift in Sources */,
 				962868F12A76BA7200A91BB9 /* AuthConfiguration.swift in Sources */,
+				963CEB6D2A8292D200B27B17 /* NetworkError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -356,6 +360,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_UIStatusBarHidden = NO;
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDefault;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -410,6 +416,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_UIStatusBarHidden = NO;
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDefault;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -433,7 +441,6 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
@@ -463,7 +470,6 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;

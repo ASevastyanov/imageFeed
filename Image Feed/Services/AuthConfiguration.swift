@@ -1,13 +1,16 @@
 import Foundation
 
-let configAccessKey = "wagLspRbFqO9RevhMLgjQ_SQ86FDCYV6yet9UPwQLzw"
-let configSecretKey = "245FqipR1u_VV3RSkIWg5VZM3VdmBbeog-rjzZrXKoI"
-let configRedirectURI = "urn:ietf:wg:oauth:2.0:oob"
-let configSccessScope = "public+read_user+write_likes"
-let defaultBaseURL = URL(string: "https://api.unsplash.com")!
-let configAuthorizeURLString = "https://unsplash.com/oauth/authorize"
-let configAuthorizationPath = "/oauth/authorize/native"
-let configCode = "code"
-
+enum AuthCinfig {
+    static let accessKey = "wagLspRbFqO9RevhMLgjQ_SQ86FDCYV6yet9UPwQLzw"
+    static let secretKey = "245FqipR1u_VV3RSkIWg5VZM3VdmBbeog-rjzZrXKoI"
+    static let redirectURI = "urn:ietf:wg:oauth:2.0:oob"
+    static let sccessScope = "public+read_user+write_likes"
+    static let defaultBaseURL = "https://api.unsplash.com"
+    static let authorizeURLString = "https://unsplash.com/oauth/authorize"
+    static let authorizationPath = "/oauth/authorize/native"
+    static let code = "code"
+    static let pathToken = "https://unsplash.com/oauth/token"
+    static let grantType = "authorization_code"
+}
 
 

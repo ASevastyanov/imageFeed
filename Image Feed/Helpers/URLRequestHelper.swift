@@ -3,13 +3,12 @@ import Foundation
 // MARK: - HTTP Request
 
 extension URLRequest {
-    static func makeHTTPRequest (
-    path: String,
-    httpMethod: String,
-    baseURL: URL = defaultBaseURL
+    static func makeHTTPRequest(
+        url: URL,
+        httpMethod: String
     ) -> URLRequest {
-        var requst = URLRequest(url: URL(string: path, relativeTo: baseURL)!)
-        requst.httpMethod = httpMethod
-        return requst
-    }
-}
+            var request = URLRequest(url: url)
+            request.httpMethod = httpMethod
+            return request
+        }
+   }

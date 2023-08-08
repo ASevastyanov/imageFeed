@@ -10,8 +10,8 @@ final class ImagesListCell: UITableViewCell {
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        formatter.timeStyle = .none
+        formatter.dateFormat = "dd MMMM yyyy"
+        formatter.locale = Locale(identifier: "ru_RU")
         return formatter
     }()
 }

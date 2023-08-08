@@ -8,19 +8,24 @@ final class WebViewViewController: UIViewController {
     
     weak var delegate: WebViewViewControllerDelegate?
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .darkContent
+    }
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        setNeedsStatusBarAppearanceUpdate()
         
-        var urlComponents = URLComponents(string: configAuthorizeURLString)!
+        guard var urlComponents = URLComponents(string: AuthCinfig.authorizeURLString) else { return }
         urlComponents.queryItems = [
-            URLQueryItem(name: "client_id", value: configAccessKey),
-            URLQueryItem(name: "redirect_uri", value: configRedirectURI),
-            URLQueryItem(name: "response_type", value: configCode),
-            URLQueryItem(name: "scope", value: configSccessScope)
+            URLQueryItem(name: "client_id", value: AuthCinfig.accessKey),
+            URLQueryItem(name: "redirect_uri", value: AuthCinfig.redirectURI),
+            URLQueryItem(name: "response_type", value: AuthCinfig.code),
+            URLQueryItem(name: "scope", value: AuthCinfig.sccessScope)
         ]
         
-        let url = urlComponents.url!
+        guard let url = urlComponents.url else { return }
         let request = URLRequest(url: url)
         webView.load(request)
         webView.navigationDelegate = self
@@ -34,6 +39,7 @@ final class WebViewViewController: UIViewController {
             forKeyPath: #keyPath(WKWebView.estimatedProgress),
             options: .new,
             context: nil)
+        setNeedsStatusBarAppearanceUpdate()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -65,7 +71,8 @@ final class WebViewViewController: UIViewController {
     }
     
     private func updateProgress() {
-        progressView.progress = Float(webView.estimatedProgress)
+        //progressView.progress = Float(webView.estimatedProgress)
+        progressView.setProgress(0, animated: true)
         progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
     }
 }
@@ -89,7 +96,7 @@ extension WebViewViewController: WKNavigationDelegate {
         if
             let url = navigationAction.request.url,
             let urlComponents = URLComponents(string: url.absoluteString),
-            urlComponents.path == configAuthorizationPath,
+            urlComponents.path == AuthCinfig.authorizationPath,
             let items = urlComponents.queryItems,
             let codeItem = items.first(where: { $0.name == "code" })
         {
