@@ -17,12 +17,12 @@ final class WebViewViewController: UIViewController {
         super.viewDidLoad()
         setNeedsStatusBarAppearanceUpdate()
         
-        guard var urlComponents = URLComponents(string: AuthCinfig.authorizeURLString) else { return }
+        guard var urlComponents = URLComponents(string: AuthConfig.authorizeURLString) else { return }
         urlComponents.queryItems = [
-            URLQueryItem(name: "client_id", value: AuthCinfig.accessKey),
-            URLQueryItem(name: "redirect_uri", value: AuthCinfig.redirectURI),
-            URLQueryItem(name: "response_type", value: AuthCinfig.code),
-            URLQueryItem(name: "scope", value: AuthCinfig.sccessScope)
+            URLQueryItem(name: "client_id", value: AuthConfig.accessKey),
+            URLQueryItem(name: "redirect_uri", value: AuthConfig.redirectURI),
+            URLQueryItem(name: "response_type", value: AuthConfig.code),
+            URLQueryItem(name: "scope", value: AuthConfig.sccessScope)
         ]
         
         guard let url = urlComponents.url else { return }
@@ -96,7 +96,7 @@ extension WebViewViewController: WKNavigationDelegate {
         if
             let url = navigationAction.request.url,
             let urlComponents = URLComponents(string: url.absoluteString),
-            urlComponents.path == AuthCinfig.authorizationPath,
+            urlComponents.path == AuthConfig.authorizationPath,
             let items = urlComponents.queryItems,
             let codeItem = items.first(where: { $0.name == "code" })
         {

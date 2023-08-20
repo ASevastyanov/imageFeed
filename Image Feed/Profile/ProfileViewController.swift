@@ -2,10 +2,10 @@ import UIKit
 
 //MARK: - UIViewController
 final class ProfileViewController: UIViewController {
-    private lazy var profileImage = UIImage(named: "Photo")
+    private let profileService = ProfileService.shared
     
     private lazy var profileImageView : UIImageView = {
-        let imageView = UIImageView(image: profileImage)
+        let imageView = UIImageView(image: UIImage(named: "Photo"))
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = imageView.frame.size.width / 2
@@ -17,7 +17,7 @@ final class ProfileViewController: UIViewController {
         let nameUserLabel = UILabel()
         nameUserLabel.text = "Екатерина Новикова"
         nameUserLabel.textColor = .ypWhite
-        nameUserLabel.font = UIFont.boldSystemFont(ofSize: 23)
+        nameUserLabel.font = .boldSystemFont(ofSize: 23)
         nameUserLabel.translatesAutoresizingMaskIntoConstraints = false
         return nameUserLabel
     }()
@@ -26,7 +26,7 @@ final class ProfileViewController: UIViewController {
         let loginUserLabel = UILabel()
         loginUserLabel.text = "@ekaterina_nov"
         loginUserLabel.textColor = .ypGray
-        loginUserLabel.font = UIFont.systemFont(ofSize: 13)
+        loginUserLabel.font = .systemFont(ofSize: 13)
         loginUserLabel.translatesAutoresizingMaskIntoConstraints = false
         return loginUserLabel
     }()
@@ -36,7 +36,7 @@ final class ProfileViewController: UIViewController {
         userDescriptionLabel.numberOfLines = 0
         userDescriptionLabel.text = "Hello, world!"
         userDescriptionLabel.textColor = .ypWhite
-        userDescriptionLabel.font = UIFont.systemFont(ofSize: 13)
+        userDescriptionLabel.font = .systemFont(ofSize: 13)
         userDescriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         return userDescriptionLabel
     }()
@@ -57,6 +57,7 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         configViews()
         configConstraints()
+        updateLabel()
     }
     
     // MARK: - Actions
@@ -90,6 +91,13 @@ final class ProfileViewController: UIViewController {
             logoutButtom.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             logoutButtom.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
         ])
+    }
+    
+    private func updateLabel() {
+        guard let profile = profileService.profile else { return }
+        nameUserLabel.text = profile.name
+        loginUserLabel.text = profile.loginName
+        userDescriptionLabel.text = profile.bio
     }
 }
 

@@ -33,7 +33,7 @@
         <scene sceneID="r4y-pu-Jj4">
             <objects>
                 <viewController id="FMu-kG-Tkv" customClass="AuthViewController" customModule="Image_Feed" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="MiQ-VJ-eqm" customClass="Auth">
+                    <view key="view" contentMode="scaleToFill" id="MiQ-VJ-eqm">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -150,8 +150,8 @@
                         <viewLayoutGuide key="safeArea" id="Q6a-SW-6x6"/>
                         <color key="backgroundColor" name="YP Background"/>
                         <constraints>
-                            <constraint firstItem="lEA-WM-tPI" firstAttribute="centerY" secondItem="Q6a-SW-6x6" secondAttribute="centerY" id="abV-hs-DE8"/>
-                            <constraint firstItem="lEA-WM-tPI" firstAttribute="centerX" secondItem="Q6a-SW-6x6" secondAttribute="centerX" id="nc6-jA-e3i"/>
+                            <constraint firstItem="lEA-WM-tPI" firstAttribute="centerX" secondItem="Q6a-SW-6x6" secondAttribute="centerX" id="INP-iB-DJB"/>
+                            <constraint firstItem="lEA-WM-tPI" firstAttribute="centerY" secondItem="Q6a-SW-6x6" secondAttribute="centerY" id="u2L-Gc-U9i"/>
                         </constraints>
                     </view>
                     <connections>
