@@ -1,8 +1,11 @@
 import UIKit
+import Kingfisher
 
 //MARK: - UIViewController
 final class ProfileViewController: UIViewController {
     private let profileService = ProfileService.shared
+    private let profileImage = ProfileImageService.shard
+    private var profileImageServiceObserver: NSObjectProtocol?
     
     private lazy var profileImageView : UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "Photo"))
@@ -58,6 +61,8 @@ final class ProfileViewController: UIViewController {
         configViews()
         configConstraints()
         updateLabel()
+        notificationProfileImage()
+        updateAvatar()
     }
     
     // MARK: - Actions
@@ -98,6 +103,28 @@ final class ProfileViewController: UIViewController {
         nameUserLabel.text = profile.name
         loginUserLabel.text = profile.loginName
         userDescriptionLabel.text = profile.bio
+    }
+    
+    private func updateAvatar() {
+        guard
+            let profileImageURL = profileImage.avatarURL,
+            let url = URL(string: profileImageURL)
+        else { return }
+        profileImageView.kf.setImage(with: url,
+                                     placeholder: UIImage(named: "Photo")
+        )
+    }
+    
+    private func notificationProfileImage() {
+        profileImageServiceObserver = NotificationCenter.default
+                    .addObserver(
+                        forName: ProfileImageService.didChangeNotification,
+                        object: nil,
+                        queue: .main
+                    ) { [weak self] _ in
+                        guard let self = self else { return }
+                        self.updateAvatar()
+                    }
     }
 }
 

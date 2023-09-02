@@ -7,8 +7,15 @@ final class SplashViewController: UIViewController {
     private let oAuth2Service = OAuth2Service()
     private let oAuth2TokenStorege = OAuth2ServiceStorage()
     private let profileService = ProfileService.shared
+    private var alertPresenter: AlertPresenterProtocol?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        alertPresenter = AlertPresenter(viewControler: self)
+    }
     
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         tokenVerification()
     }
     
@@ -20,11 +27,22 @@ final class SplashViewController: UIViewController {
     }
     
     private func tokenVerification() {
-        if let token = oAuth2TokenStorege.token {
+        if let token = oAuth2TokenStorege.getToken() {
             fetchProfile(with: token)
         } else {
             performSegue(withIdentifier: showAuthenticationScreenSegueIdentifier, sender: nil)
         }
+    }
+    
+    private func showAlertNetworkError() {
+        let alertModel = AlertModel(
+            title: "Что-то пошло не так(",
+            massage: "Не удалось войти в систему",
+            buttonText: "Ок",
+            completion: { [weak self] in
+                guard let self else { return }
+                tokenVerification()
+            })
     }
 }
 
@@ -58,10 +76,10 @@ extension SplashViewController: AuthViewControllerDelegate {
             guard let self = self else { return }
             switch result {
             case .success(let token):
-                oAuth2TokenStorege.token = token
+                oAuth2TokenStorege.setToken(token: token)
                 fetchProfile(with: token)
             case .failure:
-                // TODO
+                showAlertNetworkError()
                 break
             }
             UIBlockingProgressHUD.dismiss()
@@ -70,18 +88,18 @@ extension SplashViewController: AuthViewControllerDelegate {
     
     private func fetchProfile(with token: String) {
         UIBlockingProgressHUD.show()
-                profileService.fetchProfil(token) { [weak self] result in
-                    guard let self = self else { return }
-                    switch result {
-                    case .success:
-                        UIBlockingProgressHUD.dismiss()
-                        switchToTabBarController()
-                    case .failure(let error):
-                        // TODO
-                        break
-                        
-                    }
-                    UIBlockingProgressHUD.dismiss()
-                }
+        profileService.fetchProfil(token) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success:
+                UIBlockingProgressHUD.dismiss()
+                switchToTabBarController()
+            case .failure(let error):
+                showAlertNetworkError()
+                break
+                
+            }
+            UIBlockingProgressHUD.dismiss()
+        }
     }
 }

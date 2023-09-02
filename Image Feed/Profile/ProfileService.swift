@@ -11,6 +11,7 @@ final class ProfileService {
     static let shared = ProfileService()
     private var task: URLSessionTask?
     private let urlSession = URLSession.shared
+    private let profileImageService = ProfileImageService.shard
     private(set) var profile: Profile?
     
     private init() {}
@@ -31,6 +32,7 @@ final class ProfileService {
             switch result {
             case .success(let profileResult):
                 self.profile = Profile(model: profileResult)
+                profileImageService.fetchProfileImageURL(bearerToken: bearerToken,username: profileResult.userName) { _ in }
                 completion(.success(self.profile!))
             case .failure(let error):
                 completion(.failure(error))
