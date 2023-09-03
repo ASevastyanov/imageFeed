@@ -18,7 +18,7 @@ final class ProfileViewController: UIViewController {
     
     private lazy var nameUserLabel : UILabel = {
         let nameUserLabel = UILabel()
-        nameUserLabel.text = "Екатерина Новикова"
+        nameUserLabel.text = " "
         nameUserLabel.textColor = .ypWhite
         nameUserLabel.font = .boldSystemFont(ofSize: 23)
         nameUserLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -27,7 +27,7 @@ final class ProfileViewController: UIViewController {
     
     private lazy var loginUserLabel : UILabel = {
         let loginUserLabel = UILabel()
-        loginUserLabel.text = "@ekaterina_nov"
+        loginUserLabel.text = " "
         loginUserLabel.textColor = .ypGray
         loginUserLabel.font = .systemFont(ofSize: 13)
         loginUserLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -37,7 +37,7 @@ final class ProfileViewController: UIViewController {
     private lazy var userDescriptionLabel : UILabel = {
         let userDescriptionLabel = UILabel()
         userDescriptionLabel.numberOfLines = 0
-        userDescriptionLabel.text = "Hello, world!"
+        userDescriptionLabel.text = " "
         userDescriptionLabel.textColor = .ypWhite
         userDescriptionLabel.font = .systemFont(ofSize: 13)
         userDescriptionLabel.translatesAutoresizingMaskIntoConstraints = false

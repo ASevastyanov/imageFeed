@@ -18,4 +18,5 @@ struct UserResult: Codable {
     // MARK: - ProfileImage
     struct ProfileImage: Codable {
         let small: String
+        let medium: String
     }
