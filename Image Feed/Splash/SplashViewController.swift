@@ -22,7 +22,6 @@ final class SplashViewController: UIViewController {
         alertPresenter = AlertPresenter(viewControler: self)
         view.backgroundColor = .ypBlack
         view.addSubview(screenLogoImage)
-        oAuth2TokenStorege.removeToken()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -41,7 +40,7 @@ final class SplashViewController: UIViewController {
         if let token = oAuth2TokenStorege.getToken() {
             fetchProfile(with: token)
         } else {
-             showAuthController()
+            showAuthController()
         }
     }
     
@@ -69,11 +68,8 @@ final class SplashViewController: UIViewController {
 //MARK: - AuthViewControllerDelegate
 extension SplashViewController: AuthViewControllerDelegate {
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
-        dismiss(animated: true) { [weak self] in
-            guard let self = self else { return }
-            UIBlockingProgressHUD.show()
-            self.fetchOAuthToken(code)
-        }
+        UIBlockingProgressHUD.show()
+        self.fetchOAuthToken(code)
     }
     
     private func fetchOAuthToken(_ code: String) {

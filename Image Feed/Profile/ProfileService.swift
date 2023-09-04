@@ -32,8 +32,9 @@ final class ProfileService {
             switch result {
             case .success(let profileResult):
                 self.profile = Profile(model: profileResult)
-                profileImageService.fetchProfileImageURL(bearerToken: bearerToken,username: profileResult.userName) { _ in }
-                completion(.success(self.profile!))
+                guard let profileResponse = self.profile else { return }
+                profileImageService.fetchProfileImageURL(bearerToken: bearerToken, username: profileResult.userName) { _ in }
+                completion(.success(profileResponse))
             case .failure(let error):
                 completion(.failure(error))
             }
