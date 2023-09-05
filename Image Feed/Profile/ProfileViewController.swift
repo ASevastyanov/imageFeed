@@ -1,11 +1,14 @@
 import UIKit
+import Kingfisher
 
 //MARK: - UIViewController
 final class ProfileViewController: UIViewController {
-    private lazy var profileImage = UIImage(named: "Photo")
+    private let profileService = ProfileService.shared
+    private let profileImage = ProfileImageService.shard
+    private var profileImageServiceObserver: NSObjectProtocol?
     
     private lazy var profileImageView : UIImageView = {
-        let imageView = UIImageView(image: profileImage)
+        let imageView = UIImageView(image: UIImage(named: "Photo"))
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = imageView.frame.size.width / 2
@@ -15,18 +18,18 @@ final class ProfileViewController: UIViewController {
     
     private lazy var nameUserLabel : UILabel = {
         let nameUserLabel = UILabel()
-        nameUserLabel.text = "Екатерина Новикова"
+        nameUserLabel.text = " "
         nameUserLabel.textColor = .ypWhite
-        nameUserLabel.font = UIFont.boldSystemFont(ofSize: 23)
+        nameUserLabel.font = .boldSystemFont(ofSize: 23)
         nameUserLabel.translatesAutoresizingMaskIntoConstraints = false
         return nameUserLabel
     }()
     
     private lazy var loginUserLabel : UILabel = {
         let loginUserLabel = UILabel()
-        loginUserLabel.text = "@ekaterina_nov"
+        loginUserLabel.text = " "
         loginUserLabel.textColor = .ypGray
-        loginUserLabel.font = UIFont.systemFont(ofSize: 13)
+        loginUserLabel.font = .systemFont(ofSize: 13)
         loginUserLabel.translatesAutoresizingMaskIntoConstraints = false
         return loginUserLabel
     }()
@@ -34,9 +37,9 @@ final class ProfileViewController: UIViewController {
     private lazy var userDescriptionLabel : UILabel = {
         let userDescriptionLabel = UILabel()
         userDescriptionLabel.numberOfLines = 0
-        userDescriptionLabel.text = "Hello, world!"
+        userDescriptionLabel.text = " "
         userDescriptionLabel.textColor = .ypWhite
-        userDescriptionLabel.font = UIFont.systemFont(ofSize: 13)
+        userDescriptionLabel.font = .systemFont(ofSize: 13)
         userDescriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         return userDescriptionLabel
     }()
@@ -57,6 +60,9 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         configViews()
         configConstraints()
+        updateLabel()
+        notificationProfileImage()
+        updateAvatar()
     }
     
     // MARK: - Actions
@@ -90,6 +96,35 @@ final class ProfileViewController: UIViewController {
             logoutButtom.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             logoutButtom.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
         ])
+    }
+    
+    private func updateLabel() {
+        guard let profile = profileService.profile else { return }
+        nameUserLabel.text = profile.name
+        loginUserLabel.text = profile.loginName
+        userDescriptionLabel.text = profile.bio
+    }
+    
+    private func updateAvatar() {
+        guard
+            let profileImageURL = profileImage.avatarURL,
+            let url = URL(string: profileImageURL)
+        else { return }
+        profileImageView.kf.setImage(with: url,
+                                     placeholder: UIImage(named: "Photo")
+        )
+    }
+    
+    private func notificationProfileImage() {
+        profileImageServiceObserver = NotificationCenter.default
+                    .addObserver(
+                        forName: ProfileImageService.didChangeNotification,
+                        object: nil,
+                        queue: .main
+                    ) { [weak self] _ in
+                        guard let self = self else { return }
+                        self.updateAvatar()
+                    }
     }
 }
 

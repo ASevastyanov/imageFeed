@@ -1,6 +1,6 @@
 import Foundation
 
-enum AuthCinfig {
+enum AuthConfig {
     static let accessKey = "wagLspRbFqO9RevhMLgjQ_SQ86FDCYV6yet9UPwQLzw"
     static let secretKey = "245FqipR1u_VV3RSkIWg5VZM3VdmBbeog-rjzZrXKoI"
     static let redirectURI = "urn:ietf:wg:oauth:2.0:oob"
@@ -11,6 +11,7 @@ enum AuthCinfig {
     static let code = "code"
     static let pathToken = "https://unsplash.com/oauth/token"
     static let grantType = "authorization_code"
+    static let getProfile = "https://unsplash.com/me"
 }
 
 

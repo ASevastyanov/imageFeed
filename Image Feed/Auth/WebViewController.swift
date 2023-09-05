@@ -6,6 +6,7 @@ final class WebViewViewController: UIViewController {
     @IBOutlet private var progressView: UIProgressView!
     @IBOutlet private var webView: WKWebView!
     
+    private var estimatedPtogressObservation: NSKeyValueObservation?
     weak var delegate: WebViewViewControllerDelegate?
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -16,39 +17,9 @@ final class WebViewViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setNeedsStatusBarAppearanceUpdate()
-        
-        guard var urlComponents = URLComponents(string: AuthCinfig.authorizeURLString) else { return }
-        urlComponents.queryItems = [
-            URLQueryItem(name: "client_id", value: AuthCinfig.accessKey),
-            URLQueryItem(name: "redirect_uri", value: AuthCinfig.redirectURI),
-            URLQueryItem(name: "response_type", value: AuthCinfig.code),
-            URLQueryItem(name: "scope", value: AuthCinfig.sccessScope)
-        ]
-        
-        guard let url = urlComponents.url else { return }
-        let request = URLRequest(url: url)
-        webView.load(request)
+        fetchAuth()
+        estimatedPtogress()
         webView.navigationDelegate = self
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        webView.addObserver(
-            self,
-            forKeyPath: #keyPath(WKWebView.estimatedProgress),
-            options: .new,
-            context: nil)
-        setNeedsStatusBarAppearanceUpdate()
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-        webView.removeObserver(
-            self,
-            forKeyPath: #keyPath(WKWebView.estimatedProgress),
-            context: nil)
     }
     
     // MARK: - Actions
@@ -57,22 +28,32 @@ final class WebViewViewController: UIViewController {
     }
     
     //MARK: - Methods
-    override func observeValue(
-        forKeyPath keyPath: String?,
-        of object: Any?,
-        change: [NSKeyValueChangeKey : Any]?,
-        context: UnsafeMutableRawPointer?
-    ) {
-        if keyPath == #keyPath(WKWebView.estimatedProgress) {
-            updateProgress()
-        } else {
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
-        }
+    private func fetchAuth() {
+        guard var urlComponents = URLComponents(string: AuthConfig.authorizeURLString) else { return }
+        urlComponents.queryItems = [
+            URLQueryItem(name: "client_id", value: AuthConfig.accessKey),
+            URLQueryItem(name: "redirect_uri", value: AuthConfig.redirectURI),
+            URLQueryItem(name: "response_type", value: AuthConfig.code),
+            URLQueryItem(name: "scope", value: AuthConfig.sccessScope)
+        ]
+        
+        guard let url = urlComponents.url else { return }
+        let request = URLRequest(url: url)
+        webView.load(request)
+    }
+    
+    private func estimatedPtogress(){
+        estimatedPtogressObservation = webView.observe(
+            \.estimatedProgress,
+             options: [],
+            changeHandler: { [weak self] _, _ in
+                guard let self = self else { return }
+                self.updateProgress()
+            })
     }
     
     private func updateProgress() {
-        //progressView.progress = Float(webView.estimatedProgress)
-        progressView.setProgress(0, animated: true)
+        progressView.setProgress(1.0, animated: true)
         progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
     }
 }
@@ -96,7 +77,7 @@ extension WebViewViewController: WKNavigationDelegate {
         if
             let url = navigationAction.request.url,
             let urlComponents = URLComponents(string: url.absoluteString),
-            urlComponents.path == AuthCinfig.authorizationPath,
+            urlComponents.path == AuthConfig.authorizationPath,
             let items = urlComponents.queryItems,
             let codeItem = items.first(where: { $0.name == "code" })
         {

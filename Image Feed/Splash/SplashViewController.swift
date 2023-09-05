@@ -1,12 +1,31 @@
 import UIKit
+import ProgressHUD
 
 //MARK: - UIViewController
 final class SplashViewController: UIViewController {
     private let showAuthenticationScreenSegueIdentifier = "ShowAuthentication"
     private let oAuth2Service = OAuth2Service()
     private let oAuth2TokenStorege = OAuth2ServiceStorage()
+    private let profileService = ProfileService.shared
+    private var alertPresenter: AlertPresenterProtocol?
+    
+    private lazy var screenLogoImage : UIImageView = {
+        var imageView = UIImageView()
+        imageView = UIImageView(image: UIImage(named: "splash_screen_logo"))
+        imageView.contentMode = .scaleAspectFit
+        imageView.center = view.center
+        return imageView
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        alertPresenter = AlertPresenter(viewControler: self)
+        view.backgroundColor = .ypBlack
+        view.addSubview(screenLogoImage)
+    }
     
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         tokenVerification()
     }
     
@@ -18,36 +37,39 @@ final class SplashViewController: UIViewController {
     }
     
     private func tokenVerification() {
-        if oAuth2TokenStorege.token != nil {
-            switchToTabBarController()
+        if let token = oAuth2TokenStorege.getToken() {
+            fetchProfile(with: token)
         } else {
-            performSegue(withIdentifier: showAuthenticationScreenSegueIdentifier, sender: nil)
+            showAuthController()
         }
     }
-}
-
-//MARK: - func prepare
-extension SplashViewController {
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == showAuthenticationScreenSegueIdentifier {
-            guard
-                let navigationController = segue.destination as? UINavigationController,
-                let viewController = navigationController.viewControllers[0] as? AuthViewController
-            else { fatalError("Failed to prepare for\(showAuthenticationScreenSegueIdentifier)") }
-            viewController.delegate = self
-        } else {
-            super.prepare(for: segue, sender: sender)
-        }
+    
+    private func showAlertNetworkError() {
+        let alert = AlertModel(
+            title: "Что-то пошло не так(",
+            massage: "Не удалось войти в систему",
+            buttonText: "Ок",
+            completion: { [weak self] in
+                guard let self else { return }
+                tokenVerification()
+            })
+        alertPresenter?.showAlert(with: alert)
+    }
+    
+    private func showAuthController() {
+        let viewController = UIStoryboard(name: "Main", bundle: .main).instantiateViewController(identifier: "AuthViewController")
+        guard let authViewController = viewController as? AuthViewController else { return }
+        authViewController.delegate = self
+        authViewController.modalPresentationStyle = .fullScreen
+        present(authViewController, animated: true)
     }
 }
 
 //MARK: - AuthViewControllerDelegate
 extension SplashViewController: AuthViewControllerDelegate {
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
-        dismiss(animated: true) { [weak self] in
-            guard let self = self else { return }
-            self.fetchOAuthToken(code)
-        }
+        UIBlockingProgressHUD.show()
+        self.fetchOAuthToken(code)
     }
     
     private func fetchOAuthToken(_ code: String) {
@@ -55,12 +77,28 @@ extension SplashViewController: AuthViewControllerDelegate {
             guard let self = self else { return }
             switch result {
             case .success(let token):
-                oAuth2TokenStorege.token = token
-                self.switchToTabBarController()
+                oAuth2TokenStorege.setToken(token: token)
+                fetchProfile(with: token)
             case .failure:
-                // TODO
+                UIBlockingProgressHUD.dismiss()
+                showAlertNetworkError()
                 break
             }
+        }
+    }
+    
+    private func fetchProfile(with token: String) {
+        UIBlockingProgressHUD.show()
+        profileService.fetchProfil(token) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success:
+                switchToTabBarController()
+            case .failure(_):
+                showAlertNetworkError()
+                break
+            }
+            UIBlockingProgressHUD.dismiss()
         }
     }
 }
