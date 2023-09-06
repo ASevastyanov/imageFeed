@@ -3,6 +3,7 @@ import UIKit
 final class ImagesListViewController: UIViewController {
     @IBOutlet weak private var tableView: UITableView!
     private let imagesListCell = ImagesListCell()
+    private let imagesListService = ImagesListService.shard
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -16,13 +17,13 @@ final class ImagesListViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard segue.identifier == showSingleImageSegueIdentifier,
-                     let viewController = segue.destination as? SingleImageViewController,
-                     let indexPath = sender as? IndexPath else {
-                   super.prepare(for: segue, sender: sender)
-                   return
-               }
+              let viewController = segue.destination as? SingleImageViewController,
+              let indexPath = sender as? IndexPath else {
+            super.prepare(for: segue, sender: sender)
+            return
+        }
         let image = UIImage(named: imagesListCell.photosName[indexPath.row])
-               viewController.image = image
+        viewController.image = image
     }
 }
 
@@ -43,6 +44,7 @@ extension ImagesListViewController: UITableViewDelegate {
         let cellHeight = image.size.height * scale + imageInsets.top + imageInsets.bottom
         return cellHeight
     }
+    
 }
 
 //MARK: - UITableViewDataSource
@@ -62,5 +64,13 @@ extension ImagesListViewController: UITableViewDataSource {
         imagesListCell.configCell(for: imageListCell, with: indexPath)
         
         return imageListCell
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if let visibleIndexPaths = tableView.indexPathsForVisibleRows,
+           visibleIndexPaths.contains(indexPath) {
+            guard indexPath.row + 1 == imagesListCell.photosName.count else { return }
+            imagesListService.fetchPhotosNextPage()
+        }
     }
 }
