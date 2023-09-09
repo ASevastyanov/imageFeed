@@ -9,7 +9,7 @@ import Foundation
 
 final class ImagesListService {
     static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
-    static let shard = ImagesListService()
+    static let shared = ImagesListService()
     private let oAuth2TokenStorege = OAuth2ServiceStorage()
     private var task: URLSessionTask?
     private let dateFormatter = ISO8601DateFormatter()
@@ -36,7 +36,6 @@ final class ImagesListService {
                 self.lastloadedPage = nextPage
                 let newPhotos = photoResults.map { Photo(model: $0, dateFormatter: self.dateFormatter) }
                 self.photos.append(contentsOf: newPhotos)
-                print(photos)
                 
                 NotificationCenter.default
                     .post(name: ImagesListService.didChangeNotification,

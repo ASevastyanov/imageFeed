@@ -9,7 +9,7 @@ import Foundation
 
 final class ProfileImageService {
     static let didChangeNotification = Notification.Name(rawValue: "ProfilImageProviderDidChange")
-    static let shard = ProfileImageService()
+    static let shared = ProfileImageService()
     private var task: URLSessionTask?
     private let urlSession = URLSession.shared
     private (set) var avatarURL: String?

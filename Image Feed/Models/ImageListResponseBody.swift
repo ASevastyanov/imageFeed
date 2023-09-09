@@ -9,10 +9,10 @@ import Foundation
 
 struct ImageListResponseBody: Codable {
     let id: String
-    let createdAt: String
+    let createdAt: String?
     let width, height: Int
     let likedByUser: Bool
-    let description: String
+    let description: String?
     let urls: Urls
     
     enum CodingKeys: String, CodingKey {

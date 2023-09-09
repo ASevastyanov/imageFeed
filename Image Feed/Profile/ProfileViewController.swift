@@ -4,7 +4,7 @@ import Kingfisher
 //MARK: - UIViewController
 final class ProfileViewController: UIViewController {
     private let profileService = ProfileService.shared
-    private let profileImage = ProfileImageService.shard
+    private let profileImage = ProfileImageService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
     
     private lazy var profileImageView : UIImageView = {
@@ -71,6 +71,7 @@ final class ProfileViewController: UIViewController {
     
     //MARK: - Methods
     private func configViews() {
+        view.backgroundColor = .ypBlack
         view.addSubview(profileImageView)
         view.addSubview(nameUserLabel)
         view.addSubview(loginUserLabel)

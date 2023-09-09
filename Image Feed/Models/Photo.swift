@@ -18,10 +18,10 @@ struct Photo {
     
     init (model: ImageListResponseBody, dateFormatter: ISO8601DateFormatter) {
         id = model.id
-        size = CGSize(width: model.width, height: model.width)
-        createdAt = dateFormatter.date(from: model.createdAt)
-        welcomeDescription = model.description
-        thumbImageURL = model.urls.thumb
+        size = CGSize(width: model.width, height: model.height)
+        createdAt = dateFormatter.date(from: model.createdAt ?? "")
+        welcomeDescription = model.description ?? ""
+        thumbImageURL = model.urls.small
         largeImageURL = model.urls.raw
         isLiked = model.likedByUser
     }
