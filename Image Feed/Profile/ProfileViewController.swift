@@ -1,11 +1,14 @@
 import UIKit
 import Kingfisher
+import WebKit
 
 //MARK: - UIViewController
 final class ProfileViewController: UIViewController {
     private let profileService = ProfileService.shared
     private let profileImage = ProfileImageService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
+    private var alertPresenter: AlertPresenterProtocol?
+    private let oAuth2TokenStorege = OAuth2ServiceStorage.shared
     
     private lazy var profileImageView : UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "Photo"))
@@ -63,11 +66,14 @@ final class ProfileViewController: UIViewController {
         updateLabel()
         notificationProfileImage()
         updateAvatar()
+        alertPresenter = AlertPresenter(viewControler: self)
     }
     
     // MARK: - Actions
     @objc
-    private func didTapLogoutButton() {}
+    private func didTapLogoutButton() {
+        showAlertNetworkError()
+    }
     
     //MARK: - Methods
     private func configViews() {
@@ -118,14 +124,42 @@ final class ProfileViewController: UIViewController {
     
     private func notificationProfileImage() {
         profileImageServiceObserver = NotificationCenter.default
-                    .addObserver(
-                        forName: ProfileImageService.didChangeNotification,
-                        object: nil,
-                        queue: .main
-                    ) { [weak self] _ in
-                        guard let self = self else { return }
-                        self.updateAvatar()
-                    }
+            .addObserver(
+                forName: ProfileImageService.didChangeNotification,
+                object: nil,
+                queue: .main
+            ) { [weak self] _ in
+                guard let self = self else { return }
+                self.updateAvatar()
+            }
+    }
+    
+    private func showAlertNetworkError() {
+        let alert = AlertModelTwoAction(
+            title: "Пока, пока!",
+            massage: "Уверены что хотите выйти?",
+            buttonText: "Да",
+            buttonTextCancel: "Нет",
+            completion: { [weak self] in
+                guard let self else { return }
+                guard let window = UIApplication.shared.windows.first else {
+                                    fatalError("invalid configuration")
+                            }
+                            window.rootViewController = SplashViewController()
+                            window.makeKeyAndVisible()
+                ProfileViewController.clean()
+                oAuth2TokenStorege.removeToken()
+            })
+        alertPresenter?.showAlertTwoAction(with: alert)
+    }
+    
+    static func clean() {
+        HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
+        WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
+            records.forEach { record in
+                WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
+            }
+        }
     }
 }
 

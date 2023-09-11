@@ -41,7 +41,7 @@ extension AlertPresenter: AlertPresenterProtocol {
             model.completion?()
         }
         let actionCancel = UIAlertAction(title: model.buttonTextCancel, style: .cancel) { _ in
-            //не требует действий(скрытие алерта)
+            alert.dismiss(animated: true)
         }
         alert.addAction(action)
         alert.addAction(actionCancel)

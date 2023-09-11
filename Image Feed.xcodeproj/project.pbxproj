@@ -82,7 +82,6 @@
 		963CEB682A81331C00B27B17 /* AuthViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewControllerDelegate.swift; sourceTree = "<group>"; };
 		963CEB6C2A8292D200B27B17 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		964D889A2A6540C6007AE563 /* SingleImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleImageViewController.swift; sourceTree = "<group>"; };
-		968C71712AAAC9AE00C8887A /* Image FeedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "Image FeedTests.xctest"; path = "/Users/alexseva/Documents/imageFeed/build/Debug-iphoneos/Image FeedTests.xctest"; sourceTree = "<absolute>"; };
 		96A23FA12A7C199100D94922 /* OAuth2Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2Service.swift; sourceTree = "<group>"; };
 		96A23FA32A7C19A500D94922 /* OAuth2TokenStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2TokenStorage.swift; sourceTree = "<group>"; };
 		96A23FA62A7C1A4F00D94922 /* OAuthTokenResponseBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthTokenResponseBody.swift; sourceTree = "<group>"; };
@@ -96,6 +95,7 @@
 		96D710E02A92677A0021C5A9 /* ProfileImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageService.swift; sourceTree = "<group>"; };
 		96D710E22A9268130021C5A9 /* UserResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResult.swift; sourceTree = "<group>"; };
 		96DCC85F2A541656006649AC /* ImagesListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListCell.swift; sourceTree = "<group>"; };
+		96F658832AAD8F15002D44C2 /* Image FeedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Image FeedTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +124,7 @@
 			children = (
 				7D9CFA4128DDEE7F00D971A7 /* Image Feed */,
 				9622CCF22AA7898D005285D2 /* Image Feed.app */,
+				96F658832AAD8F15002D44C2 /* Image FeedTests.xctest */,
 			);
 			sourceTree = "<group>";
 		};
@@ -314,7 +315,7 @@
 			);
 			name = "Image FeedTests";
 			productName = "Image FeedTests";
-			productReference = 968C71712AAAC9AE00C8887A /* Image FeedTests.xctest */;
+			productReference = 96F658832AAD8F15002D44C2 /* Image FeedTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
