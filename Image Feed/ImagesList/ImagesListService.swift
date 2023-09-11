@@ -7,6 +7,7 @@
 
 import Foundation
 
+//MARK: - fetchPhotosNextPage
 final class ImagesListService {
     static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
     static let shared = ImagesListService()
@@ -23,7 +24,6 @@ final class ImagesListService {
         assert(Thread.isMainThread)
         task?.cancel()
         let nextPage = lastloadedPage == nil ? 1 : lastloadedPage! + 1
-        
         guard let request = requestImageList(page: nextPage) else {
             assertionFailure("\(NetworkError.urlRequestError)")
             return
@@ -36,7 +36,6 @@ final class ImagesListService {
                 self.lastloadedPage = nextPage
                 let newPhotos = photoResults.map { Photo(model: $0, dateFormatter: self.dateFormatter) }
                 self.photos.append(contentsOf: newPhotos)
-                
                 NotificationCenter.default
                     .post(name: ImagesListService.didChangeNotification,
                           object: self,
@@ -51,6 +50,7 @@ final class ImagesListService {
     }
 }
 
+//MARK: - requestImageList
 extension ImagesListService {
     private func requestImageList(page: Int) -> URLRequest? {
         guard var urlComponents = URLComponents(string: AuthConfig.defaultBaseURL) else {
@@ -71,5 +71,71 @@ extension ImagesListService {
         guard let bearerToken = oAuth2TokenStorege.getToken() else { return nil }
         request.setValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
         return request
+    }
+}
+
+//MARK: - isLiked
+extension ImagesListService {
+    func changeLike(
+        photoId: String,
+        isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void
+    ) {
+        assert(Thread.isMainThread)
+        guard let request = requestLiked(isLike: isLike, photoId: photoId) else { return }
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<LikePhotoResult, Error>) in
+            guard let self = self else { return }
+            assert(Thread.isMainThread)
+            switch result {
+            case .success(let likedResults):
+                changeInfoLike(photoId: likedResults.photo.id)
+                completion(.success(()))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+            self.task = nil
+        }
+        self.task = task
+        task.resume()
+    }
+}
+
+//MARK: - requestLiked
+extension ImagesListService {
+    func requestLiked(isLike: Bool, photoId: String) -> URLRequest? {
+        guard var urlComponents = URLComponents(string: AuthConfig.defaultBaseURL) else {
+            assertionFailure("\(NetworkError.urlComponentsError)")
+            return nil
+        }
+        urlComponents.path = "/photos/\(photoId)/like"
+        guard let url = urlComponents.url else {
+            assertionFailure("\(NetworkError.urlError)")
+            return nil
+        }
+        var request = URLRequest(url: url)
+        isLike ? (request.httpMethod = "DELETE") : (request.httpMethod = "POST")
+        guard let bearerToken = oAuth2TokenStorege.getToken() else { return nil }
+        request.setValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
+        return request
+    }
+    
+    private func changeInfoLike(photoId: String) {
+        if let index = self.photos.firstIndex(where: { $0.id == photoId }) {
+            let photo = self.photos[index]
+            let photoResult = ImageListResponseBody(
+                id: photo.id,
+                createdAt: photo.createdAt?.description, width: Int(photo.size.width),
+                height: Int(photo.size.height),
+                likedByUser: !photo.isLiked,
+                description: photo.welcomeDescription,
+                urls: Urls(
+                    raw: photo.largeImageURL,
+                    full: "",
+                    regular: "",
+                    small: photo.thumbImageURL,
+                    thumb: ""
+                ))
+            let newPhoto = Photo(model: photoResult, dateFormatter: self.dateFormatter)
+            self.photos[index] = newPhoto
+        }
     }
 }

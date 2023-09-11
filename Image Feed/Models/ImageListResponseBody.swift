@@ -27,3 +27,7 @@ struct ImageListResponseBody: Codable {
 struct Urls: Codable {
     let raw, full, regular, small, thumb: String
 }
+
+struct LikePhotoResult: Decodable {
+    let photo: ImageListResponseBody
+}

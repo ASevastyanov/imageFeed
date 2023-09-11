@@ -29,4 +29,22 @@ extension AlertPresenter: AlertPresenterProtocol {
         alert.addAction(action)
         viewControler?.present(alert, animated: true)
     }
+    
+    func showAlertTwoAction(with model: AlertModelTwoAction) {
+        let alert = UIAlertController(
+            title: model.title,
+            message: model.massage,
+            preferredStyle: .alert)
+        alert.view.accessibilityIdentifier = "Alert presenter"
+        
+        let action = UIAlertAction(title: model.buttonText, style: .default) { _ in
+            model.completion?()
+        }
+        let actionCancel = UIAlertAction(title: model.buttonTextCancel, style: .cancel) { _ in
+            //не требует действий(скрытие алерта)
+        }
+        alert.addAction(action)
+        alert.addAction(actionCancel)
+        viewControler?.present(alert, animated: true)
+    }
 }

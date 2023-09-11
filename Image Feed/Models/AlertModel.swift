@@ -13,3 +13,11 @@ struct AlertModel {
     let buttonText: String
     let completion: (() -> Void)?
 }
+
+struct AlertModelTwoAction {
+    let title: String
+    let massage: String
+    let buttonText: String
+    let buttonTextCancel: String
+    let completion: (() -> Void)?
+}

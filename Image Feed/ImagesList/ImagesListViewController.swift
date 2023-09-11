@@ -5,6 +5,7 @@ final class ImagesListViewController: UIViewController {
     private let imagesListCell = ImagesListCell()
     private let imagesListService = ImagesListService.shared
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
+    private var alertPresenter: AlertPresenterProtocol?
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -12,6 +13,7 @@ final class ImagesListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        alertPresenter = AlertPresenter(viewControler: self)
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
         imagesListService.fetchPhotosNextPage()
         NotificationCenter.default
@@ -50,6 +52,17 @@ final class ImagesListViewController: UIViewController {
             } completion: { _ in }
         }
     }
+    
+    private func showAlertNetworkError() {
+        let alert = AlertModel(
+            title: "Что-то пошло не так(",
+            massage: "Не удалось войти в систему",
+            buttonText: "Ок",
+            completion: { [weak self] in
+                guard self != nil else { return }
+            })
+        alertPresenter?.showAlert(with: alert)
+    }
 }
 
 //MARK: - UITableViewDelegate
@@ -79,10 +92,10 @@ extension ImagesListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ImagesListCell.reuseIdentifier, for: indexPath)
-        
         guard let imageListCell = cell as? ImagesListCell else {
             return UITableViewCell()
         }
+        imageListCell.delegate = self
         imagesListCell.configCell(for: imageListCell, with: indexPath)
         tableView.reloadRows(at: [indexPath], with: .automatic)
         return imageListCell
@@ -93,6 +106,27 @@ extension ImagesListViewController: UITableViewDataSource {
            visibleIndexPaths.contains(indexPath) {
             guard indexPath.row + 1 == imagesListCell.photos.count else { return }
             imagesListService.fetchPhotosNextPage()
+        }
+    }
+}
+
+// MARK: - Configuration imageListCell like
+extension ImagesListViewController: ImagesListCellDelegate {
+    func imageListCellDidTapLike(_ cell: ImagesListCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
+        let photo = imagesListCell.photos[indexPath.row]
+        UIBlockingProgressHUD.show()
+        imagesListService.changeLike(photoId: photo.id, isLike: photo.isLiked) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success:
+                self.imagesListCell.photos = self.imagesListService.photos
+                cell.setIsLiked(!photo.isLiked)
+            case .failure(let error):
+                showAlertNetworkError()
+                assertionFailure("Error to change like info \(error)")
+            }
+            UIBlockingProgressHUD.dismiss()
         }
     }
 }

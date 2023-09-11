@@ -53,15 +53,16 @@ final class SingleImageViewController: UIViewController {
     }
     
     private func showAlertNetworkError() {
-        let alert = AlertModel(
+        let alert = AlertModelTwoAction(
             title: "Что-то пошло не так(",
-            massage: "Не удалось войти в систему",
-            buttonText: "Ок",
+            massage: "Попробовать ещё раз?",
+            buttonText: "Повторить",
+            buttonTextCancel: "Не надо",
             completion: { [weak self] in
                 guard let self else { return }
                 self.setImage()
             })
-        alertPresenter?.showAlert(with: alert)
+        alertPresenter?.showAlertTwoAction(with: alert)
     }
     
     private func rescaleAndCenterImageInScrollView(image: UIImage) {
