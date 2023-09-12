@@ -1,8 +1,8 @@
 # imageFeed
 
 ## **Ссылки**
-[Макет Figma]([https://www.figma.com/file/l0IMG3Eys35fUrbvArtwsR/YP-Quiz?node-id=34%3A243](https://www.figma.com/file/HyDfKh5UVPOhPZIhBqIm3q/Image-Feed-(YP)?type=design&node-id=331-3518&mode=design&t=EOi6BV4eaph6MBTQ-0))
-[Unsplash API]([https://imdb-api.com/api#Top250Movies-header](https://unsplash.com/documentation))
+[Макет Figma](https://www.figma.com/file/HyDfKh5UVPOhPZIhBqIm3q/Image-Feed-(YP)?type=design&node-id=331-3518&mode=design&t=EOi6BV4eaph6MBTQ-0)
+[Unsplash API](https://unsplash.com/documentation)
 
 ## **Назначение и цели приложения**
 
