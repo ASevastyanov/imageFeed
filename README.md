@@ -1,8 +1,10 @@
 # imageFeed
 Дизайн в Figma - https://www.figma.com/file/HyDfKh5UVPOhPZIhBqIm3q/Image-Feed-(YP)?type=design&node-id=331-3518&mode=design&t=EOi6BV4eaph6MBTQ-0
+
 Unsplash API - https://unsplash.com/documentation#like-a-photo
 
 Назначение и цели приложения
+
 Многостраничное приложение предназначено для просмотра изображений через API Unsplash.
 
 Цели приложения:
