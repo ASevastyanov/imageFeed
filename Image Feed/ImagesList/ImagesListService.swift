@@ -126,7 +126,8 @@ extension ImagesListService {
             let photo = self.photos[index]
             let photoResult = ImageListResponseBody(
                 id: photo.id,
-                createdAt: photo.createdAt?.description, width: Int(photo.size.width),
+                createdAt: photo.createdAt.flatMap { dateFormatter.string(from: $0) },
+                width: Int(photo.size.width),
                 height: Int(photo.size.height),
                 likedByUser: !photo.isLiked,
                 description: photo.welcomeDescription,
