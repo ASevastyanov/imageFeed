@@ -13,7 +13,7 @@ final class ImagesListCell: UITableViewCell {
     weak var delegate: ImagesListCellDelegate?
     static let reuseIdentifier = "ImagesListCell"
     private let imagesListService = ImagesListService.shared
-    var photos = [Photo]()
+    var photos: [Photo] = []
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -27,9 +27,9 @@ final class ImagesListCell: UITableViewCell {
     }
     
     func setIsLiked(_ isLiked: Bool) {
-        isLiked ? (likeButton.setImage(UIImage(named: "like_button_on"), for: .normal)) : (likeButton.setImage(UIImage(named: "like_button_off"), for: .normal))
+        let image = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
+        self.likeButton.setImage(image, for: .normal)
     }
-    
 }
 
 //MARK: - UITableViewCell
@@ -59,7 +59,6 @@ extension ImagesListCell {
         guard let date = photos[indexPath.row].createdAt else { return }
         cell.dateLabel.text = dateFormatter.string(from: date)
         let isLiked = photos[indexPath.row].isLiked
-        let likeImage = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
-        cell.likeButton.setImage(likeImage, for: .normal)
+        cell.setIsLiked(isLiked)
     }
 }

@@ -1,4 +1,6 @@
 import UIKit
+import Kingfisher
+
 //MARK: - UIViewController
 final class ImagesListViewController: UIViewController {
     @IBOutlet weak private var tableView: UITableView!
@@ -27,8 +29,8 @@ final class ImagesListViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == showSingleImageSegueIdentifier {
-            let viewController = segue.destination as! SingleImageViewController
-            let indexPath = sender as! IndexPath
+            guard let viewController = segue.destination as? SingleImageViewController else { return }
+            guard let indexPath = sender as? IndexPath else { return }
             let photo = imagesListCell.photos[indexPath.row].largeImageURL
             guard let largeImageUrl = URL(string: photo) else { return }
             viewController.imageURL = largeImageUrl
@@ -97,7 +99,6 @@ extension ImagesListViewController: UITableViewDataSource {
         }
         imageListCell.delegate = self
         imagesListCell.configCell(for: imageListCell, with: indexPath)
-        tableView.reloadRows(at: [indexPath], with: .automatic)
         return imageListCell
     }
     

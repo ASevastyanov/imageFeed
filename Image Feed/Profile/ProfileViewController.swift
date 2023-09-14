@@ -9,6 +9,8 @@ final class ProfileViewController: UIViewController {
     private var profileImageServiceObserver: NSObjectProtocol?
     private var alertPresenter: AlertPresenterProtocol?
     private let oAuth2TokenStorege = OAuth2ServiceStorage.shared
+    private let imageListCell = ImagesListCell()
+    private let imagesListService = ImagesListService.shared
     
     private lazy var profileImageView : UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "Photo"))
@@ -143,12 +145,13 @@ final class ProfileViewController: UIViewController {
             completion: { [weak self] in
                 guard let self else { return }
                 guard let window = UIApplication.shared.windows.first else {
-                                    fatalError("invalid configuration")
-                            }
-                            window.rootViewController = SplashViewController()
-                            window.makeKeyAndVisible()
+                    fatalError("invalid configuration")
+                }
+                window.rootViewController = SplashViewController()
+                window.makeKeyAndVisible()
                 ProfileViewController.clean()
                 oAuth2TokenStorege.removeToken()
+                imagesListService.deletePhotos()
             })
         alertPresenter?.showAlertTwoAction(with: alert)
     }

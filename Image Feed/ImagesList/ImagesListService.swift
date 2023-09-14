@@ -16,14 +16,14 @@ final class ImagesListService {
     private let dateFormatter = ISO8601DateFormatter()
     private let urlSession = URLSession.shared
     private (set) var photos: [Photo] = []
-    private var lastloadedPage: Int?
+    private var lastLoadedPage: Int?
     
     private init() {}
     
     func fetchPhotosNextPage() {
         assert(Thread.isMainThread)
-        task?.cancel()
-        let nextPage = lastloadedPage == nil ? 1 : lastloadedPage! + 1
+        if task != nil { return }
+        let nextPage = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
         guard let request = requestImageList(page: nextPage) else {
             assertionFailure("\(NetworkError.urlRequestError)")
             return
@@ -32,14 +32,14 @@ final class ImagesListService {
             guard let self = self else { return }
             assert(Thread.isMainThread)
             switch result {
-            case .success(let photoResults):
-                self.lastloadedPage = nextPage
-                let newPhotos = photoResults.map { Photo(model: $0, dateFormatter: self.dateFormatter) }
+            case .success(let photoResult):
+                self.lastLoadedPage = nextPage
+                let newPhotos = photoResult.map { Photo(model: $0, dateFormatter: self.dateFormatter) }
                 self.photos.append(contentsOf: newPhotos)
                 NotificationCenter.default
                     .post(name: ImagesListService.didChangeNotification,
                           object: self,
-                          userInfo: ["Photos": self .photos])
+                          userInfo: ["Photos": self.photos])
             case .failure(let error):
                 assertionFailure("\(error)")
             }
@@ -81,10 +81,13 @@ extension ImagesListService {
         isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void
     ) {
         assert(Thread.isMainThread)
-        guard let request = requestLiked(isLike: isLike, photoId: photoId) else { return }
+        task?.cancel()
+        guard let request = requestLiked(isLike: isLike, photoId: photoId) else {
+            completion(.failure(NetworkError.urlRequestError))
+            return
+        }
         let task = urlSession.objectTask(for: request) { [weak self] (result: Result<LikePhotoResult, Error>) in
             guard let self = self else { return }
-            assert(Thread.isMainThread)
             switch result {
             case .success(let likedResults):
                 changeInfoLike(photoId: likedResults.photo.id)
@@ -137,5 +140,12 @@ extension ImagesListService {
             let newPhoto = Photo(model: photoResult, dateFormatter: self.dateFormatter)
             self.photos[index] = newPhoto
         }
+    }
+}
+
+//MARK: - Delete array "Photo" to exit a profile
+extension ImagesListService {
+    func deletePhotos() {
+        photos = []
     }
 }

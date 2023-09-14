@@ -40,7 +40,7 @@ extension AlertPresenter: AlertPresenterProtocol {
         let action = UIAlertAction(title: model.buttonText, style: .default) { _ in
             model.completion?()
         }
-        let actionCancel = UIAlertAction(title: model.buttonTextCancel, style: .cancel) { _ in
+        let actionCancel = UIAlertAction(title: model.buttonTextCancel, style: .default) { _ in
             alert.dismiss(animated: true)
         }
         alert.addAction(action)
