@@ -8,6 +8,7 @@ final class ImagesListViewController: UIViewController {
     private let imagesListService = ImagesListService.shared
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
     private var alertPresenter: AlertPresenterProtocol?
+    private var photos: [Photo] = []
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -31,7 +32,7 @@ final class ImagesListViewController: UIViewController {
         if segue.identifier == showSingleImageSegueIdentifier {
             guard let viewController = segue.destination as? SingleImageViewController else { return }
             guard let indexPath = sender as? IndexPath else { return }
-            let photo = imagesListCell.photos[indexPath.row].largeImageURL
+            let photo = photos[indexPath.row].largeImageURL
             guard let largeImageUrl = URL(string: photo) else { return }
             viewController.imageURL = largeImageUrl
         }
@@ -42,9 +43,9 @@ final class ImagesListViewController: UIViewController {
     
     private func updateTableViewAnimated() {
         guard view != nil else { return }
-        let oldCount = imagesListCell.photos.count
+        let oldCount = photos.count
         let newCount = imagesListService.photos.count
-        imagesListCell.photos = imagesListService.photos
+        photos = imagesListService.photos
         if oldCount != newCount {
             tableView.performBatchUpdates {
                 let indexPaths = (oldCount..<newCount).map { i in
@@ -74,7 +75,7 @@ extension ImagesListViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let image = imagesListCell.photos[indexPath.row]
+        let image = photos[indexPath.row]
         let imageInsets = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
         let imageViewWidth = tableView.bounds.width - imageInsets.left - imageInsets.right
         let imageWidth = image.size.width
@@ -94,18 +95,19 @@ extension ImagesListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ImagesListCell.reuseIdentifier, for: indexPath)
-        guard let imageListCell = cell as? ImagesListCell else {
+        guard let imagesListCell = cell as? ImagesListCell else {
             return UITableViewCell()
         }
-        imageListCell.delegate = self
-        imagesListCell.configCell(for: imageListCell, with: indexPath)
-        return imageListCell
+        imagesListCell.delegate = self
+        let photo = photos[indexPath.row]
+        imagesListCell.configCell(photo: photo)
+        return imagesListCell
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if let visibleIndexPaths = tableView.indexPathsForVisibleRows,
            visibleIndexPaths.contains(indexPath) {
-            guard indexPath.row + 1 == imagesListCell.photos.count else { return }
+            guard indexPath.row + 1 == photos.count else { return }
             imagesListService.fetchPhotosNextPage()
         }
     }
@@ -115,13 +117,13 @@ extension ImagesListViewController: UITableViewDataSource {
 extension ImagesListViewController: ImagesListCellDelegate {
     func imageListCellDidTapLike(_ cell: ImagesListCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
-        let photo = imagesListCell.photos[indexPath.row]
+        let photo = photos[indexPath.row]
         UIBlockingProgressHUD.show()
         imagesListService.changeLike(photoId: photo.id, isLike: photo.isLiked) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success:
-                self.imagesListCell.photos = self.imagesListService.photos
+                self.photos = self.imagesListService.photos
                 cell.setIsLiked(!photo.isLiked)
             case .failure(let error):
                 showAlertNetworkError()

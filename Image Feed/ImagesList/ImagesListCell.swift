@@ -13,7 +13,6 @@ final class ImagesListCell: UITableViewCell {
     weak var delegate: ImagesListCellDelegate?
     static let reuseIdentifier = "ImagesListCell"
     private let imagesListService = ImagesListService.shared
-    var photos: [Photo] = []
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -27,7 +26,7 @@ final class ImagesListCell: UITableViewCell {
     }
     
     func setIsLiked(_ isLiked: Bool) {
-        let image = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
+        let image = UIImage(named: isLiked ? "like_button_on" : "like_button_off")
         self.likeButton.setImage(image, for: .normal)
     }
 }
@@ -39,26 +38,24 @@ extension ImagesListCell {
         cellImage.kf.cancelDownloadTask()
     }
     
-    func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
-        let image = photos[indexPath.row].thumbImageURL
+    func configCell(photo: Photo){
+        let image = photo.thumbImageURL
         let imageURL = URL(string: image)
-        cell.cellImage.kf.indicatorType = .activity
-        cell.cellImage.kf.setImage(with: imageURL, placeholder: UIImage(named: "Stub"),
-                                   options: [.transition(.fade(2))]) { [weak self] result in
+        cellImage.kf.indicatorType = .activity
+        cellImage.kf.setImage(with: imageURL, placeholder: UIImage(named: "Stub"),
+                              options: [.transition(.fade(2))]) { [weak self] result in
             guard let self = self else { return }
             switch result {
-            case .success(let image):
-                cell.cellImage.contentMode = .scaleToFill
-                cell.cellImage.image = image.image
+            case .success:
+                cellImage.contentMode = .scaleToFill
             case .failure(let error):
                 print("Error of loading image: \(error)")
                 self.cellImage.image = UIImage(named: "imagePlaceholder")
             }
         }
         
-        guard let date = photos[indexPath.row].createdAt else { return }
-        cell.dateLabel.text = dateFormatter.string(from: date)
-        let isLiked = photos[indexPath.row].isLiked
-        cell.setIsLiked(isLiked)
+        guard let date = photo.createdAt else { return }
+        dateLabel.text = dateFormatter.string(from: date)
+        setIsLiked(photo.isLiked)
     }
 }
