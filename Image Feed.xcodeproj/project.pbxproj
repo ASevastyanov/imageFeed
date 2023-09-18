@@ -45,6 +45,7 @@
 		96D710E12A92677B0021C5A9 /* ProfileImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D710E02A92677A0021C5A9 /* ProfileImageService.swift */; };
 		96D710E32A9268130021C5A9 /* UserResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D710E22A9268130021C5A9 /* UserResult.swift */; };
 		96DCC8602A541657006649AC /* ImagesListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DCC85F2A541656006649AC /* ImagesListCell.swift */; };
+		96F658872AB45A50002D44C2 /* GradientLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F658862AB45A4F002D44C2 /* GradientLayer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -85,6 +86,7 @@
 		96D710E02A92677A0021C5A9 /* ProfileImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageService.swift; sourceTree = "<group>"; };
 		96D710E22A9268130021C5A9 /* UserResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResult.swift; sourceTree = "<group>"; };
 		96DCC85F2A541656006649AC /* ImagesListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListCell.swift; sourceTree = "<group>"; };
+		96F658862AB45A4F002D44C2 /* GradientLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientLayer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,6 +152,7 @@
 				962868E92A72C53F00A91BB9 /* UIColor.swift */,
 				96A23FA82A7E361600D94922 /* URLRequestHelper.swift */,
 				96A23FAA2A7E362500D94922 /* URLSessionHelper.swift */,
+				96F658862AB45A4F002D44C2 /* GradientLayer.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -354,6 +357,7 @@
 				96D710DA2A8A3E810021C5A9 /* ProfileResponseBody.swift in Sources */,
 				96BFFF662A603E750024BBE4 /* ProfileViewController.swift in Sources */,
 				7D9CFA5728DDEF8900D971A7 /* ImagesListViewController.swift in Sources */,
+				96F658872AB45A50002D44C2 /* GradientLayer.swift in Sources */,
 				962868EA2A72C53F00A91BB9 /* UIColor.swift in Sources */,
 				9622CCF12AA7680F005285D2 /* ImageListResponseBody.swift in Sources */,
 				9622CCDF2A961B22005285D2 /* AlertModel.swift in Sources */,

@@ -11,6 +11,7 @@ final class ProfileViewController: UIViewController {
     private let oAuth2TokenStorege = OAuth2ServiceStorage.shared
     private let imageListCell = ImagesListCell()
     private let imagesListService = ImagesListService.shared
+    private let gradientLayer = GradientLayer.shared
     
     private lazy var profileImageView : UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "Photo"))
@@ -65,6 +66,7 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         configViews()
         configConstraints()
+        updateProfile()
         updateLabel()
         notificationProfileImage()
         updateAvatar()
@@ -107,6 +109,13 @@ final class ProfileViewController: UIViewController {
         ])
     }
     
+    private func updateProfile(){
+        gradientLayer.gradientLayer(view: profileImageView, width: 70, height: 70, cornerRadius: 35)
+        gradientLayer.gradientLayer(view: nameUserLabel, width: nameUserLabel.intrinsicContentSize.width, height: nameUserLabel.intrinsicContentSize.height, cornerRadius: 10)
+        gradientLayer.gradientLayer(view: loginUserLabel, width: loginUserLabel.intrinsicContentSize.width, height: loginUserLabel.intrinsicContentSize.height, cornerRadius: 5)
+        gradientLayer.gradientLayer(view: self.userDescriptionLabel, width: self.userDescriptionLabel.frame.width, height: self.userDescriptionLabel.frame.height, cornerRadius: 5)
+    }
+    
     private func updateLabel() {
         guard let profile = profileService.profile else { return }
         nameUserLabel.text = profile.name
@@ -119,9 +128,11 @@ final class ProfileViewController: UIViewController {
             let profileImageURL = profileImage.avatarURL,
             let url = URL(string: profileImageURL)
         else { return }
-        profileImageView.kf.setImage(with: url,
-                                     placeholder: UIImage(named: "Photo")
+        profileImageView.kf.setImage(
+            with: url,
+            placeholder: UIImage(named: "Photo")
         )
+        self.gradientLayer.removeFromSuperLayer(views: [self.profileImageView, self.nameUserLabel, self.loginUserLabel, self.userDescriptionLabel])
     }
     
     private func notificationProfileImage() {
@@ -133,6 +144,7 @@ final class ProfileViewController: UIViewController {
             ) { [weak self] _ in
                 guard let self = self else { return }
                 self.updateAvatar()
+                self.gradientLayer.removeFromSuperLayer(views: [self.profileImageView, self.nameUserLabel, self.loginUserLabel, self.userDescriptionLabel])
             }
     }
     

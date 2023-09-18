@@ -4,7 +4,6 @@ import Kingfisher
 //MARK: - UIViewController
 final class ImagesListViewController: UIViewController {
     @IBOutlet weak private var tableView: UITableView!
-    private let imagesListCell = ImagesListCell()
     private let imagesListService = ImagesListService.shared
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
     private var alertPresenter: AlertPresenterProtocol?
@@ -100,7 +99,7 @@ extension ImagesListViewController: UITableViewDataSource {
         }
         imagesListCell.delegate = self
         let photo = photos[indexPath.row]
-        imagesListCell.configCell(photo: photo)
+        imagesListCell.configCell(photo: photo, for: imagesListCell)
         return imagesListCell
     }
     
@@ -118,6 +117,7 @@ extension ImagesListViewController: ImagesListCellDelegate {
     func imageListCellDidTapLike(_ cell: ImagesListCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
         let photo = photos[indexPath.row]
+        gradientLayer.animateLikeButton(cell.likeButton)
         UIBlockingProgressHUD.show()
         imagesListService.changeLike(photoId: photo.id, isLike: photo.isLiked) { [weak self] result in
             guard let self = self else { return }
@@ -129,6 +129,7 @@ extension ImagesListViewController: ImagesListCellDelegate {
                 showAlertNetworkError()
                 assertionFailure("Error to change like info \(error)")
             }
+            gradientLayer.stopLikeButton(cell, photo: photo)
             UIBlockingProgressHUD.dismiss()
         }
     }
