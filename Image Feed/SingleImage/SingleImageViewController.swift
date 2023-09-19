@@ -1,12 +1,13 @@
 import UIKit
+import Kingfisher
 
 //MARK: - UIViewController
 final class SingleImageViewController: UIViewController {
-    var image: UIImage! {
+    private var alertPresenter: AlertPresenterProtocol?
+    var imageURL: URL! {
         didSet {
             guard isViewLoaded else { return }
-            imageView.image = image
-            rescaleAndCenterImageInScrollView(image: image)
+            setImage()
         }
     }
     
@@ -16,11 +17,13 @@ final class SingleImageViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        alertPresenter = AlertPresenter(viewControler: self)
+        setImage()
+        
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
-        imageView.image = image
-        rescaleAndCenterImageInScrollView(image: image)
     }
+    
     // MARK: - Actions
     @IBAction private func didTapBackButton() {
         dismiss(animated: true, completion: nil)
@@ -28,12 +31,40 @@ final class SingleImageViewController: UIViewController {
     
     @IBAction private func sharingButton() {
         let shere = UIActivityViewController(
-            activityItems: [image!],
+            activityItems: [imageView.image!],
             applicationActivities: nil
         )
         present(shere, animated: true, completion: nil)
     }
+    
     //MARK: - Methods
+    private func setImage() {
+        UIBlockingProgressHUD.show()
+        imageView.kf.setImage(with: imageURL) { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success(let imageResult):
+                self.rescaleAndCenterImageInScrollView(image: imageResult.image)
+            case .failure:
+                self.showAlertNetworkError()
+            }
+            UIBlockingProgressHUD.dismiss()
+        }
+    }
+    
+    private func showAlertNetworkError() {
+        let alert = AlertModelTwoAction(
+            title: "Что-то пошло не так(",
+            massage: "Попробовать ещё раз?",
+            buttonText: "Повторить",
+            buttonTextCancel: "Не надо",
+            completion: { [weak self] in
+                guard let self else { return }
+                self.setImage()
+            })
+        alertPresenter?.showAlertTwoAction(with: alert)
+    }
+    
     private func rescaleAndCenterImageInScrollView(image: UIImage) {
         let minZoomScale = scrollView.minimumZoomScale
         let maxZoomScale = scrollView.maximumZoomScale
@@ -57,3 +88,4 @@ extension SingleImageViewController: UIScrollViewDelegate {
         imageView
     }
 }
+

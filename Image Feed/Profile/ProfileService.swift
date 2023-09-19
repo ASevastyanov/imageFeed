@@ -11,7 +11,7 @@ final class ProfileService {
     static let shared = ProfileService()
     private var task: URLSessionTask?
     private let urlSession = URLSession.shared
-    private let profileImageService = ProfileImageService.shard
+    private let profileImageService = ProfileImageService.shared
     private(set) var profile: Profile?
     
     private init() {}

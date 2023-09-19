@@ -8,7 +8,7 @@ extension URLSession {
         completion: @escaping (Result<DecodingType, Error>) -> Void
     ) -> URLSessionTask {
         let task = dataTask(with: request) { data, response, error in
-            if let error {
+            if error != nil {
                 DispatchQueue.main.async {
                     completion(.failure(NetworkError.urlSessionError))
                 }
