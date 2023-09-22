@@ -7,6 +7,7 @@ final class ImagesListViewController: UIViewController {
     private let imagesListService = ImagesListService.shared
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
     private var alertPresenter: AlertPresenterProtocol?
+    private var gradientLayer = GradientLayer.shared
     private var photos: [Photo] = []
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
