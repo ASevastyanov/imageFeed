@@ -16,6 +16,7 @@ protocol ProfilePresenterProtocol: AnyObject {
     func clean()
 }
 
+//MARK: - ProfilePresenter
 final class ProfilePresenter: ProfilePresenterProtocol {
     weak var  view: ProfileViewControllerProtocol?
     private var profileImageServiceObserver: NSObjectProtocol?
@@ -24,11 +25,13 @@ final class ProfilePresenter: ProfilePresenterProtocol {
     private let profileService = ProfileService.shared
     private let profileImage = ProfileImageService.shared
     
+    // MARK: - Lifecycle
     func viewDidLoad() {
         notificationProfileImage()
         view?.updateProfile(profile: profileService.profile)
     }
     
+    //MARK: - Methods
     func notificationProfileImage() {
         profileImageServiceObserver = NotificationCenter.default
             .addObserver(

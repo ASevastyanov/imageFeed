@@ -69,7 +69,6 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
         presenter = ProfilePresenter()
         presenter?.view = self
         presenter?.viewDidLoad()
-        
         configViews()
         configConstraints()
         alertPresenter = AlertPresenter(viewControler: self)
