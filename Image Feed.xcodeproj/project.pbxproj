@@ -17,6 +17,10 @@
 		9615734E2ABD592900194756 /* WebViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9615734D2ABD592900194756 /* WebViewTests.swift */; };
 		961573582ABDDECF00194756 /* WebViewPresenterSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 961573572ABDDECF00194756 /* WebViewPresenterSpy.swift */; };
 		9615735A2ABDDEFB00194756 /* WebViewViewControllerSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 961573592ABDDEFB00194756 /* WebViewViewControllerSpy.swift */; };
+		9615735C2ABFFF5800194756 /* ProfilePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9615735B2ABFFF5800194756 /* ProfilePresenter.swift */; };
+		9615735F2AC069D300194756 /* ProfileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9615735E2AC069D300194756 /* ProfileTests.swift */; };
+		961573612AC069E900194756 /* ProfileViewControllerSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 961573602AC069E900194756 /* ProfileViewControllerSpy.swift */; };
+		961573632AC06A3C00194756 /* ProfilePresenterSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 961573622AC06A3C00194756 /* ProfilePresenterSpy.swift */; };
 		9622CCDD2A961A7D005285D2 /* AlertPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9622CCDC2A961A7D005285D2 /* AlertPresenter.swift */; };
 		9622CCDF2A961B22005285D2 /* AlertModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9622CCDE2A961B22005285D2 /* AlertModel.swift */; };
 		9622CCE12A961D4D005285D2 /* AlertPresenterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9622CCE02A961D4D005285D2 /* AlertPresenterProtocol.swift */; };
@@ -76,6 +80,10 @@
 		9615734D2ABD592900194756 /* WebViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewTests.swift; sourceTree = "<group>"; };
 		961573572ABDDECF00194756 /* WebViewPresenterSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewPresenterSpy.swift; sourceTree = "<group>"; };
 		961573592ABDDEFB00194756 /* WebViewViewControllerSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewViewControllerSpy.swift; sourceTree = "<group>"; };
+		9615735B2ABFFF5800194756 /* ProfilePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePresenter.swift; sourceTree = "<group>"; };
+		9615735E2AC069D300194756 /* ProfileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTests.swift; sourceTree = "<group>"; };
+		961573602AC069E900194756 /* ProfileViewControllerSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewControllerSpy.swift; sourceTree = "<group>"; };
+		961573622AC06A3C00194756 /* ProfilePresenterSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePresenterSpy.swift; sourceTree = "<group>"; };
 		9622CCDC2A961A7D005285D2 /* AlertPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenter.swift; sourceTree = "<group>"; };
 		9622CCDE2A961B22005285D2 /* AlertModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertModel.swift; sourceTree = "<group>"; };
 		9622CCE02A961D4D005285D2 /* AlertPresenterProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenterProtocol.swift; sourceTree = "<group>"; };
@@ -163,6 +171,7 @@
 		9615734C2ABD592900194756 /* Image FeedTests */ = {
 			isa = PBXGroup;
 			children = (
+				9615735D2AC0696E00194756 /* ProfileView */,
 				961573562ABDDE9900194756 /* WebView */,
 			);
 			path = "Image FeedTests";
@@ -176,6 +185,16 @@
 				961573592ABDDEFB00194756 /* WebViewViewControllerSpy.swift */,
 			);
 			path = WebView;
+			sourceTree = "<group>";
+		};
+		9615735D2AC0696E00194756 /* ProfileView */ = {
+			isa = PBXGroup;
+			children = (
+				9615735E2AC069D300194756 /* ProfileTests.swift */,
+				961573622AC06A3C00194756 /* ProfilePresenterSpy.swift */,
+				961573602AC069E900194756 /* ProfileViewControllerSpy.swift */,
+			);
+			path = ProfileView;
 			sourceTree = "<group>";
 		};
 		9622CCDB2A961A52005285D2 /* Alert */ = {
@@ -284,9 +303,10 @@
 		96BFFF672A6040DA0024BBE4 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				96BFFF652A603E750024BBE4 /* ProfileViewController.swift */,
 				96D710D72A8A3DDA0021C5A9 /* ProfileService.swift */,
 				96D710E02A92677A0021C5A9 /* ProfileImageService.swift */,
+				96BFFF652A603E750024BBE4 /* ProfileViewController.swift */,
+				9615735B2ABFFF5800194756 /* ProfilePresenter.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -421,6 +441,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				962868F62A77B87600A91BB9 /* WebViewController.swift in Sources */,
+				9615735C2ABFFF5800194756 /* ProfilePresenter.swift in Sources */,
 				96A23FA92A7E361600D94922 /* URLRequestHelper.swift in Sources */,
 				7D9CFA4328DDEE7F00D971A7 /* AppDelegate.swift in Sources */,
 				96D710DF2A8D0E440021C5A9 /* Profile.swift in Sources */,
@@ -462,9 +483,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9615735F2AC069D300194756 /* ProfileTests.swift in Sources */,
 				9615734E2ABD592900194756 /* WebViewTests.swift in Sources */,
+				961573632AC06A3C00194756 /* ProfilePresenterSpy.swift in Sources */,
 				9615735A2ABDDEFB00194756 /* WebViewViewControllerSpy.swift in Sources */,
 				961573582ABDDECF00194756 /* WebViewPresenterSpy.swift in Sources */,
+				961573612AC069E900194756 /* ProfileViewControllerSpy.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
