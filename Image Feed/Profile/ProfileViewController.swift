@@ -8,8 +8,10 @@ protocol ProfileViewControllerProtocol: AnyObject {
     func updateAvatar()
 }
 
+typealias ProfileViewControllerProtocols = UIViewController & ProfileViewControllerProtocol
+
 //MARK: - UIViewController
-final class ProfileViewController: UIViewController & ProfileViewControllerProtocol{
+final class ProfileViewController: ProfileViewControllerProtocols {
     private var alertPresenter: AlertPresenterProtocol?
     private let gradientLayer = GradientLayer.shared
     var presenter: ProfilePresenterProtocol?

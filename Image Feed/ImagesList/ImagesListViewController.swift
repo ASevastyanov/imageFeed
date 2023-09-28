@@ -7,8 +7,10 @@ protocol ImagesListViewControllerProtocol: AnyObject {
     func showAlertNetworkError()
 }
 
+typealias ImagesListViewControllerProtocols = UIViewController & ImagesListViewControllerProtocol
+
 //MARK: - UIViewController
-final class ImagesListViewController: UIViewController & ImagesListViewControllerProtocol{
+final class ImagesListViewController: ImagesListViewControllerProtocols {
     @IBOutlet weak private var tableView: UITableView!
     
     private let showSingleImageSegueIdentifier = "ShowSingleImage"

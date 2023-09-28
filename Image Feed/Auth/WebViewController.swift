@@ -9,8 +9,10 @@ public protocol WebViewViewControllerProtocol: AnyObject {
     func setProgressHidden(_ isHidden: Bool)
 }
 
+typealias WebViewViewControllerProtocols = UIViewController & WebViewViewControllerProtocol
+
 //MARK: - UIViewController
-final class WebViewViewController: UIViewController & WebViewViewControllerProtocol {
+final class WebViewViewController: WebViewViewControllerProtocols {
     @IBOutlet private var progressView: UIProgressView!
     @IBOutlet private var webView: WKWebView!
     
