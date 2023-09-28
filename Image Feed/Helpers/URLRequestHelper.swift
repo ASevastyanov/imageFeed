@@ -6,7 +6,7 @@ extension URLRequest {
     static func makeHTTPRequest(
         path: String,
         httpMethod: String,
-        baseURL: URL? = URL(string: AuthConfig.defaultBaseURL)
+        baseURL: URL? = URL(string: AuthConfiguration.standard.defaultBaseURL)
     ) -> URLRequest? {
         guard let url = URL(string: path, relativeTo: baseURL) else {
             assertionFailure("Failed to create url")

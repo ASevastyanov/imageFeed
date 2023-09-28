@@ -1,17 +1,20 @@
 import UIKit
 import Kingfisher
-import WebKit
+
+protocol ProfileViewControllerProtocol: AnyObject {
+    var presenter: ProfilePresenterProtocol? { get set }
+    func showAlertToLogOut()
+    func updateProfile(profile: Profile?)
+    func updateAvatar()
+}
+
+typealias ProfileViewControllerProtocols = UIViewController & ProfileViewControllerProtocol
 
 //MARK: - UIViewController
-final class ProfileViewController: UIViewController {
-    private let profileService = ProfileService.shared
-    private let profileImage = ProfileImageService.shared
-    private var profileImageServiceObserver: NSObjectProtocol?
+final class ProfileViewController: ProfileViewControllerProtocols {
     private var alertPresenter: AlertPresenterProtocol?
-    private let oAuth2TokenStorege = OAuth2ServiceStorage.shared
-    private let imageListCell = ImagesListCell()
-    private let imagesListService = ImagesListService.shared
     private let gradientLayer = GradientLayer.shared
+    var presenter: ProfilePresenterProtocol?
     
     private lazy var profileImageView : UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "Photo"))
@@ -64,22 +67,64 @@ final class ProfileViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        updateProfileAnimation()
+        presenter = ProfilePresenter()
+        presenter?.view = self
+        presenter?.viewDidLoad()
         configViews()
         configConstraints()
-        updateProfile()
-        updateLabel()
-        notificationProfileImage()
-        updateAvatar()
         alertPresenter = AlertPresenter(viewControler: self)
     }
     
     // MARK: - Actions
     @objc
     private func didTapLogoutButton() {
-        showAlertNetworkError()
+        showAlertToLogOut()
     }
     
     //MARK: - Methods
+    func configure(_ presenter: ProfilePresenterProtocol) {
+        self.presenter = presenter
+        self.presenter?.view = self
+    }
+    
+    func updateProfile(profile: Profile?) {
+        updateAvatar()
+        
+        guard let profile = profile else { return }
+        nameUserLabel.text = profile.name
+        loginUserLabel.text = profile.loginName
+        userDescriptionLabel.text = profile.bio
+    }
+    
+    func updateAvatar() {
+        let url = presenter?.getURLForAvatar()
+        profileImageView.kf.setImage(
+            with: url,
+            placeholder: UIImage(named: "Photo")
+        )
+        gradientLayer.removeFromSuperLayer(views: [profileImageView, nameUserLabel, loginUserLabel, userDescriptionLabel])
+    }
+    
+    func showAlertToLogOut() {
+        let alert = AlertModelTwoAction(
+            title: "Пока, пока!",
+            massage: "Уверены что хотите выйти?",
+            buttonText: "Да",
+            buttonTextCancel: "Нет",
+            completion: { [weak self] in
+                guard let self else { return }
+                presenter?.clean()
+                guard let window = UIApplication.shared.windows.first else {
+                    fatalError("invalid configuration")
+                }
+                window.rootViewController = SplashViewController()
+                window.makeKeyAndVisible()
+            })
+        alertPresenter?.showAlertTwoAction(with: alert)
+    }
+    
+    //MARK: - Private methods
     private func configViews() {
         view.backgroundColor = .ypBlack
         view.addSubview(profileImageView)
@@ -109,72 +154,11 @@ final class ProfileViewController: UIViewController {
         ])
     }
     
-    private func updateProfile(){
+    private func updateProfileAnimation(){
         gradientLayer.gradientLayer(view: profileImageView, width: 70, height: 70, cornerRadius: 35)
         gradientLayer.gradientLayer(view: nameUserLabel, width: nameUserLabel.intrinsicContentSize.width, height: nameUserLabel.intrinsicContentSize.height, cornerRadius: 10)
         gradientLayer.gradientLayer(view: loginUserLabel, width: loginUserLabel.intrinsicContentSize.width, height: loginUserLabel.intrinsicContentSize.height, cornerRadius: 5)
-        gradientLayer.gradientLayer(view: self.userDescriptionLabel, width: self.userDescriptionLabel.frame.width, height: self.userDescriptionLabel.frame.height, cornerRadius: 5)
-    }
-    
-    private func updateLabel() {
-        guard let profile = profileService.profile else { return }
-        nameUserLabel.text = profile.name
-        loginUserLabel.text = profile.loginName
-        userDescriptionLabel.text = profile.bio
-    }
-    
-    private func updateAvatar() {
-        guard
-            let profileImageURL = profileImage.avatarURL,
-            let url = URL(string: profileImageURL)
-        else { return }
-        profileImageView.kf.setImage(
-            with: url,
-            placeholder: UIImage(named: "Photo")
-        )
-        self.gradientLayer.removeFromSuperLayer(views: [self.profileImageView, self.nameUserLabel, self.loginUserLabel, self.userDescriptionLabel])
-    }
-    
-    private func notificationProfileImage() {
-        profileImageServiceObserver = NotificationCenter.default
-            .addObserver(
-                forName: ProfileImageService.didChangeNotification,
-                object: nil,
-                queue: .main
-            ) { [weak self] _ in
-                guard let self = self else { return }
-                self.updateAvatar()
-                self.gradientLayer.removeFromSuperLayer(views: [self.profileImageView, self.nameUserLabel, self.loginUserLabel, self.userDescriptionLabel])
-            }
-    }
-    
-    private func showAlertNetworkError() {
-        let alert = AlertModelTwoAction(
-            title: "Пока, пока!",
-            massage: "Уверены что хотите выйти?",
-            buttonText: "Да",
-            buttonTextCancel: "Нет",
-            completion: { [weak self] in
-                guard let self else { return }
-                guard let window = UIApplication.shared.windows.first else {
-                    fatalError("invalid configuration")
-                }
-                window.rootViewController = SplashViewController()
-                window.makeKeyAndVisible()
-                ProfileViewController.clean()
-                oAuth2TokenStorege.removeToken()
-                imagesListService.deletePhotos()
-            })
-        alertPresenter?.showAlertTwoAction(with: alert)
-    }
-    
-    static func clean() {
-        HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
-        WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
-            records.forEach { record in
-                WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
-            }
-        }
+        gradientLayer.gradientLayer(view: userDescriptionLabel, width: userDescriptionLabel.intrinsicContentSize.width, height: userDescriptionLabel.intrinsicContentSize.height, cornerRadius: 5)
     }
 }
 

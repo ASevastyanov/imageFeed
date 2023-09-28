@@ -17,8 +17,11 @@ final class ImagesListService {
     private let urlSession = URLSession.shared
     private (set) var photos: [Photo] = []
     private var lastLoadedPage: Int?
+    private let configuration: AuthConfiguration
     
-    private init() {}
+    private init(configuration: AuthConfiguration = .standard) {
+        self.configuration = configuration
+    }
     
     func fetchPhotosNextPage() {
         assert(Thread.isMainThread)
@@ -53,7 +56,7 @@ final class ImagesListService {
 //MARK: - requestImageList
 extension ImagesListService {
     private func requestImageList(page: Int) -> URLRequest? {
-        guard var urlComponents = URLComponents(string: AuthConfig.defaultBaseURL) else {
+        guard var urlComponents = URLComponents(string: configuration.defaultBaseURL) else {
             assertionFailure("\(NetworkError.urlComponentsError)")
             return nil
         }
@@ -105,7 +108,7 @@ extension ImagesListService {
 //MARK: - requestLiked
 extension ImagesListService {
     func requestLiked(isLike: Bool, photoId: String) -> URLRequest? {
-        guard var urlComponents = URLComponents(string: AuthConfig.defaultBaseURL) else {
+        guard var urlComponents = URLComponents(string: configuration.defaultBaseURL) else {
             assertionFailure("\(NetworkError.urlComponentsError)")
             return nil
         }

@@ -1,38 +1,41 @@
 import UIKit
 import Kingfisher
 
+protocol ImagesListViewControllerProtocol: AnyObject {
+    var presenter: ImagesListPresenterProtocol? { get set }
+    func updateTableViewAnimated()
+    func showAlertNetworkError()
+}
+
+typealias ImagesListViewControllerProtocols = UIViewController & ImagesListViewControllerProtocol
+
 //MARK: - UIViewController
-final class ImagesListViewController: UIViewController {
+final class ImagesListViewController: ImagesListViewControllerProtocols {
     @IBOutlet weak private var tableView: UITableView!
-    private let imagesListService = ImagesListService.shared
+    
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
     private var alertPresenter: AlertPresenterProtocol?
-    private var photos: [Photo] = []
+    var presenter: ImagesListPresenterProtocol?
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        presenter = ImagesListPresenter()
+        presenter?.view = self
+        presenter?.viewDidLoad()
         alertPresenter = AlertPresenter(viewControler: self)
-        tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
-        imagesListService.fetchPhotosNextPage()
-        NotificationCenter.default
-            .addObserver(forName: ImagesListService.didChangeNotification,
-                         object: imagesListService,
-                         queue: .main) { [weak self] _ in
-                guard let self = self else { return }
-                self.updateTableViewAnimated()
-            }
     }
     
+    //MARK: - Methods
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == showSingleImageSegueIdentifier {
             guard let viewController = segue.destination as? SingleImageViewController else { return }
             guard let indexPath = sender as? IndexPath else { return }
-            let photo = photos[indexPath.row].largeImageURL
-            guard let largeImageUrl = URL(string: photo) else { return }
+            let largeImageUrl = presenter?.getURLForlargeImage(indexPath: indexPath)
             viewController.imageURL = largeImageUrl
         }
         else {
@@ -40,11 +43,9 @@ final class ImagesListViewController: UIViewController {
         }
     }
     
-    private func updateTableViewAnimated() {
+    func updateTableViewAnimated() {
         guard view != nil else { return }
-        let oldCount = photos.count
-        let newCount = imagesListService.photos.count
-        photos = imagesListService.photos
+        guard let (oldCount, newCount) = presenter?.photosCouneter() else { return }
         if oldCount != newCount {
             tableView.performBatchUpdates {
                 let indexPaths = (oldCount..<newCount).map { i in
@@ -55,7 +56,7 @@ final class ImagesListViewController: UIViewController {
         }
     }
     
-    private func showAlertNetworkError() {
+    func showAlertNetworkError() {
         let alert = AlertModel(
             title: "Что-то пошло не так(",
             massage: "Не удалось войти в систему",
@@ -74,7 +75,7 @@ extension ImagesListViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let image = photos[indexPath.row]
+        guard let image = presenter?.photos[indexPath.row] else { return 10 }
         let imageInsets = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
         let imageViewWidth = tableView.bounds.width - imageInsets.left - imageInsets.right
         let imageWidth = image.size.width
@@ -87,9 +88,9 @@ extension ImagesListViewController: UITableViewDelegate {
 
 //MARK: - UITableViewDataSource
 extension ImagesListViewController: UITableViewDataSource {
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return imagesListService.photos.count
+        guard let presenter else { return 10 }
+        return presenter.imagesListService.photos.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -98,7 +99,7 @@ extension ImagesListViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         imagesListCell.delegate = self
-        let photo = photos[indexPath.row]
+        guard let photo = presenter?.photos[indexPath.row] else { return UITableViewCell() }
         imagesListCell.configCell(photo: photo, for: imagesListCell)
         return imagesListCell
     }
@@ -106,8 +107,8 @@ extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if let visibleIndexPaths = tableView.indexPathsForVisibleRows,
            visibleIndexPaths.contains(indexPath) {
-            guard indexPath.row + 1 == photos.count else { return }
-            imagesListService.fetchPhotosNextPage()
+            guard indexPath.row + 1 == presenter?.photos.count else { return }
+            presenter?.imagesListService.fetchPhotosNextPage()
         }
     }
 }
@@ -116,21 +117,6 @@ extension ImagesListViewController: UITableViewDataSource {
 extension ImagesListViewController: ImagesListCellDelegate {
     func imageListCellDidTapLike(_ cell: ImagesListCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
-        let photo = photos[indexPath.row]
-        gradientLayer.animateLikeButton(cell.likeButton)
-        UIBlockingProgressHUD.show()
-        imagesListService.changeLike(photoId: photo.id, isLike: photo.isLiked) { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .success:
-                self.photos = self.imagesListService.photos
-                cell.setIsLiked(!photo.isLiked)
-            case .failure(let error):
-                showAlertNetworkError()
-                assertionFailure("Error to change like info \(error)")
-            }
-            gradientLayer.stopLikeButton(cell, photo: photo)
-            UIBlockingProgressHUD.dismiss()
-        }
+        presenter?.likeChangeService(cell, indexPath)
     }
 }

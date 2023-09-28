@@ -2,10 +2,15 @@ import Foundation
 
 final class OAuth2Service {
     static let shared = OAuth2Service()
-    
     private let urlSession = URLSession.shared
     private var task: URLSessionTask?
     private var lastCode: String?
+    
+    private let configuration: AuthConfiguration
+    
+    init(configuration: AuthConfiguration = .standard) {
+        self.configuration = configuration
+    }
     
     func fetchOAuthToken(
         _ code: String,
@@ -39,16 +44,16 @@ final class OAuth2Service {
 
 extension OAuth2Service {
     private func authTokenRequest(code: String) -> URLRequest? {
-        guard var urlComponents = URLComponents(string: AuthConfig.pathToken) else {
+        guard var urlComponents = URLComponents(string: configuration.pathToken) else {
             assertionFailure("\(NetworkError.urlComponentsError)")
             return nil
         }
         urlComponents.queryItems = [
-            URLQueryItem(name: "client_id", value: AuthConfig.accessKey),
-            URLQueryItem(name: "client_secret", value: AuthConfig.secretKey),
-            URLQueryItem(name: "redirect_uri", value: AuthConfig.redirectURI),
+            URLQueryItem(name: "client_id", value: configuration.accessKey),
+            URLQueryItem(name: "client_secret", value: configuration.secretKey),
+            URLQueryItem(name: "redirect_uri", value: configuration.redirectURI),
             URLQueryItem(name: "code", value: code),
-            URLQueryItem(name: "grant_type", value: AuthConfig.grantType)
+            URLQueryItem(name: "grant_type", value: configuration.grantType)
         ]
         guard let url = urlComponents.url else {
             assertionFailure("\(NetworkError.urlError)")
