@@ -8,12 +8,12 @@
 import Foundation
 
 enum Constants {
-    static let AccessKey = "wagLspRbFqO9RevhMLgjQ_SQ86FDCYV6yet9UPwQLzw"
-    static let SecretKey = "245FqipR1u_VV3RSkIWg5VZM3VdmBbeog-rjzZrXKoI"
-    static let RedirectURI = "urn:ietf:wg:oauth:2.0:oob"
-    static let AccessScope = "public+read_user+write_likes"
-    static let DefaultBaseURL = "https://api.unsplash.com"
-    static let UnsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
+    static let accessKey = "wagLspRbFqO9RevhMLgjQ_SQ86FDCYV6yet9UPwQLzw"
+    static let secretKey = "245FqipR1u_VV3RSkIWg5VZM3VdmBbeog-rjzZrXKoI"
+    static let redirectURI = "urn:ietf:wg:oauth:2.0:oob"
+    static let accessScope = "public+read_user+write_likes"
+    static let defaultBaseURL = "https://api.unsplash.com"
+    static let unsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
     static let grantType = "authorization_code"
     static let pathToken = "https://unsplash.com/oauth/token"
 }
@@ -28,7 +28,16 @@ struct AuthConfiguration{
     let grantType: String
     let pathToken: String
     
-    init(accessKey: String, secretKey: String, redirectURI: String, accessScope: String, authURLString: String, defaultBaseURL: String, grantType: String, pathToken: String) {
+    init(
+        accessKey: String,
+        secretKey: String,
+        redirectURI: String,
+        accessScope: String,
+        authURLString: String,
+        defaultBaseURL: String,
+        grantType: String,
+        pathToken: String
+    ) {
         self.accessKey = accessKey
         self.secretKey = secretKey
         self.redirectURI = redirectURI
@@ -40,12 +49,12 @@ struct AuthConfiguration{
     }
     
     static var standard: AuthConfiguration {
-        return AuthConfiguration(accessKey: Constants.AccessKey,
-                                 secretKey: Constants.SecretKey,
-                                 redirectURI: Constants.RedirectURI,
-                                 accessScope: Constants.AccessScope,
-                                 authURLString: Constants.UnsplashAuthorizeURLString,
-                                 defaultBaseURL: Constants.DefaultBaseURL,
+        return AuthConfiguration(accessKey: Constants.accessKey,
+                                 secretKey: Constants.secretKey,
+                                 redirectURI: Constants.redirectURI,
+                                 accessScope: Constants.accessScope,
+                                 authURLString: Constants.unsplashAuthorizeURLString,
+                                 defaultBaseURL: Constants.defaultBaseURL,
                                  grantType: Constants.grantType,
                                  pathToken: Constants.pathToken)
     }

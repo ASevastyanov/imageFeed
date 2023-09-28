@@ -26,7 +26,6 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
     override func viewDidLoad() {
         super.viewDidLoad()
         setNeedsStatusBarAppearanceUpdate()
-        //        fetchAuth()
         presenter?.viewDidLoad()
         estimatedProgress()
         webView.navigationDelegate = self
